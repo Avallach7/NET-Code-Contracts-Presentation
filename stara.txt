@@ -1,0 +1,132 @@
+https://docs.google.com/document/d/1B1r5o2f1ST9WJ5yW2o-VJD0t9VjA3XcYnEBc1Sl6KyQ/edit#
+
+1. Definicja
+Programowanie kontraktowe - podejście polegające na definiowaniu dla interfejsów wymagań dotyczących nie tylko typu, ale i wartości parametrów wejściowych, zwracanych wartości oraz stanu obiektu lub lokalnych zmiennych w metodach - czyli preconditions, postconditions i invariants.
+2. Wsparcie
+Pierwszym językiem zaprojektowanym z myślą o programowaniu kontraktowym był Eiffel w 1986. Innymi językami wspierającymi je na poziomie składni są między innymi D i Clojure. Deklaratywnym językiem służącym do pisania specyfikacji z elementami analogicznymi do programowania kontraktowego jest OCL, stanowiący część UMLa. 
+C# wspiera programowanie kontraktowe dzięki oficjalnemu, otwarto źródłowemu dodatkowi do Visual Studio. 
+3. Kluczowe korzyści
+dodatkowe sprawdzenie kodu w czasie testów aplikacji
+generowana dodatkowa dokumentacja i bardziej samo-dokumentujący kod
+bardziej informacyjne niż assercje (kilka rodzajów kontraktów)
+są dziedziczone i mogą być rozszerzane
+precyzyjne namierzanie błędu z dokładnością do konkretnej metody
+statyczne sprawdzanie części kontraktów
+kontrakty są kompilowane warunkowo i konfigurowalne pod względem zachowania w runtime
+Sposób użycia
+Kontrakty są definiowane przez umieszczenie na początku metody wywołań do metod statycznej klasy Contract. Sposób ten został wybrany aby uniknąć wprowadzania dodatkowej składni do języka. Nie są to jednak prawdziwe wywołania - są raczej użyte przez build system do wygenerowania kodu sprawdzającego, którego forma zależy od rodzaju kontraktu. 
+Treść kontraktów jest sprawdzana pod kątem efektów ubocznych - są one zabronione i nie będą się kompilować. Dzięki ich brakowi, można je zignorować w procesie budowania (kompilacja warunkowa) nie ryzykując zmiany działania programu, oraz umieszczać w nich sprawdzenia ciężkie obliczeniowo (które będą wykonywane tylko w czasie testów).
+4. Elementy kontraktów
+4.1. Wymagania wstępne - preconditions
+Wymagania wstępne - zazwyczaj używane do nałożenia wymagań co do wartości parametrów lub zastanego stanu obiektu którego metoda jest wywoływana. Sprawdzane kiedy metoda jest wywoływana.
+Contract.Requires(input != null );
+W przypadku zewnętrznych interfejsów możemy użyć wariantu tego kontraktu parametryzowanego typem:
+Contract.Requires<ArgumentNullException>(input != null );
+Różni się on od zwykłej wersji tym, że przy kompilowaniu kodu w trybie produkcyjnym, zostanie on nie zignorowany jak inne kontrakty, ale zamieniany na kod rzucający wyjątek wybranego typu.
+4.1. Gwarancje końcowe - postconditions
+Wymagania końcowe - Są sprawdzane przy opuszczaniu metody, nie ważne jak do niego doszło - na przykład kiedy metoda ma wiele różnych wyjść. Są ważne niezależnie od tego czy został rzucony albo natrafiony w wywoływanych metodach wyjątek. 
+Ich typowym zastosowaniem jest zagwarantowanie własności wartości zwracanej:
+Contract.Ensures(Contract.Result<int>() > 0)
+Mogą także przykładowo zagwarantować zmianę stanu obiektu do którego należą:
+Contract.Ensures(this.healthPoints < 0);
+Można gwarantować też wartość parametrów wyjściowych i innych zmiennych na końcu działania metody:
+Contract.Ensures(Contract.ValueAtReturn(out dataToModify) == 3);
+Oraz ustalać powiązania między początkowym a końcowym stanem pól i zmiennych:
+Contract.Ensures(this.Count > Contract.OldValue(this.Count) + 1);
+Contract.Ensures(healthPoints == Contract.OldValue(healthPoints));
+4.2. Niezmienniki - invariants
+Niezmienniki to gwarancje sprawdzane na końcu każdej publicznej metody w klasie (z pewnymi optymalizacjami i specjalnymi przypadkami). Są zapisywane w metodzie wyróżnionej specjalnym atrybutem której nie będzie dało się wywołać bezpośrednio. Oznaczają wymagania co do jej stanu które muszą być spełnione przez cały czas istnienia obiektu. 
+[ContractInvariantMethod]
+private void InvariantContract () 
+{
+    Contract.Invariant ( this.healthPoints >= -10 );
+}
+5. Użycie w interfejsach
+Kontrakty można specyfikować nie tylko dla implementacji metod, ale także dla interfejsów. W tym celu tworzymy klasę implementującą interfejs i oznaczoną jako jego kontrakt za pomocą pary atrybutów. W ciele metod umieszczamy jedynie zawartość kontraktów. Jeśli oczekiwane jest zwrócenie czegoś, w celu spełnienia wymagań kompilatora zwracamy default(T) lub rzucamy wyjątek (np NotImplementedException). Aby zagwarantować że klasa nie zostanie nigdy użyta, tworzymy w niej pusty prywatny konstruktor.
+[ContractClass(typeof(IExapmpleContract))]
+public interface IExample
+{
+    int DoSomething();
+}
+
+[ContractClassFor(typeof(IExample))]
+internal class IExapmpleContract : IExample
+{
+    int DoSomething()
+    {
+        Contract.Ensures(Contract.Result<int>() >= -1);
+        return default(int);
+    }
+    
+    private IExapmpleContract () {}
+}
+6. Dziedziczenie
+Kontrakty są dziedziczone przez implementacje metod w klasach pochodnych (dotyczy także implementacji interfejsów). Klasy pochodne nie mogą dodawać nowych wymagań wstępnych, a jedynie nowe wymagania końcowe. W ten sposób zachowujemy gwarancję że żadna instancja nie odrzuci wywołania które dla innej byłoby kontraktowo poprawne. 
+Można za to dodać dodatkowe gwarancje końcowe - ale nie da się osłabiać już zastanych.
+Można także dodawać kolejne niezmienniki - będą one sprawdzane razem z tymi odziedziczonymi. Dziedziczenie kontraktu może być w razie potrzeby wyłączone za pomocą atrybutu 
+[ContractOption("contract", "inheritance", false)]
+
+7. Konfiguracja
+7.1. Opcje konfiguracyjne
+
+7.2 Poziomy sprawdzania kontraktów
+Poziom sprawdzania kontraktów
+Włączone sprawdzenia w czasie działania aplikacji
+Requires<E>*
+Requires
+Ensures
+Invariant
+Pełen
+X
+X
+X
+X
+Wstępne i końcowe
+X
+X
+X
+
+
+Wstępne
+X
+X
+
+
+
+
+Produkcyjny
+X
+
+
+
+
+
+
+Brak
+
+
+
+
+
+
+
+
+7.3 Efekty niedotrzymania kontraktów
+Błąd asercji i zatrzymanie debuggera
+Rzucenie wybranego dla kontraktu wyjątku
+Inny kod określony przez rejestrację na event:
+Contract.ContractFailed += (sender, e) => 
+{
+    Debug.Log(“may be logged or fail unit test”);
+    Assert.Fail (e.FailureKind.ToString() + ”:” + e.DebugMessage);
+};
+7.4 Wyłączanie kontraktów
+Przy budowaniu projektu korzystającego z kontraktów, otrzymujemy referencyjne assembly zawierające stuby metod API kontraktów, oznaczone za pomocą atrybutów jako do pominięcia przy kompilacji jeśli kontrakty nie są aktywne. Oznacza to że funkcje których wywołania umieściliśmy w kontraktach, nie będą wywoływane. Dzięki temu że kompilator pilnował tego żeby kod kontraktów nie miał efektów ubocznych, wyłączenie ich na pewno nie ma wpływu na działanie programu.
+8. Alternatywy
+Programowanie defensywnie
+sprawdzamy to o czym wiemy że może być niepoprawne (naruszenie sprawdzenia to błąd użytkownika i staramy się je obsłużyć - np wyjątkiem)
+Kontraktami gwarantujemy poprawność kodu, w którą zarazem ufamy (naruszenie kontraktu to błąd programisty i nie obsługujemy go w runtime)
+Asercje
+Funkcjonalność oferowana przez asercje jest podzbiorem tego co oferują kontrakty. Istnieje nawet metoda Contract.Assert która pozwala na tworzenie asercji oferujących część zalet kontraktów. Są one czymś bardziej ogólnym od kontraktów - z tego powodu nie mogą być jednak dziedziczone ani użyte do generowania dodatkowej dokumentacji.
+
+

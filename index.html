@@ -2,59 +2,104 @@
 <html lang="en">
 
 <head>
-    <title>Shower Presentation Engine</title>
+    <title>.NET Code Contracts</title>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="shower/themes/material/styles/screen-16x10.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700|Roboto:100,300,500,900&amp;subset=latin-ext" rel="stylesheet">
+    <style>
+        .slide {
+            background: #1c7ef5;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .main-title {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 100;
+            text-align: center;
+            font-size: 80px;
+            line-height: 400px;
+        }
+        
+        .slide h2 {
+            font-family: 'Roboto Slab', serif;
+            color: #1c7ef5;
+            background: white;
+            display: inline-block;
+            padding: 7px 20px;
+        }
+        
+        body>footer {
+            bottom: 10px;
+            right: 10px;
+            position: absolute;
+            z-index: 1;
+            color: white;
+            font-weight: 100;
+            font-size: 12px;
+        }
+        
+        .progress {
+            box-shadow: none;
+            background: white;
+            height: 4px;
+            border-right: 4px solid white;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        #cover:after {
+            display: none;
+        }
+        
+        .slide {
+            line-height: initial;
+        }
+        
+        .slide code {
+            background: transparent;
+            font-size: 10px;
+            white-space: pre-wrap;
+            line-height: 0px !important;
+        }
+
+    </style>
 </head>
 
 <body class="shower list">
     <header class="caption">
-        <h1>Shower Presentation Engine</h1>
-        <p>Yours Truly, Famous Inc.</p>
+        <h1>.NET Code Contracts</h1>
+        <p>Adam Gołębiowski / NewVoiceMedia</p>
     </header>
     <section class="slide" id="cover">
-        <h2>Shower Presentation Engine</h2>
-        <p>Brought to you by <a href="http://pepelsbey.net">Vadim Makeev</a></p>
-        <img src="pictures/cover.jpg" alt="" class="cover">
-        <!--
-			To apply styles to the certain slides
-			set slide ID to get needed elements
-			-->
-        <style>
-            #cover h2 {
-                margin: 30px 0 0;
-                color: #FFF;
-                text-align: center;
-                font-size: 70px;
-            }
-            
-            #cover p {
-                margin: 10px 0 0;
-                text-align: center;
-                color: #FFF;
-                font-style: italic;
-                font-size: 20px;
-            }
-            
-            #cover p a {
-                color: #FFF;
-            }
-
-        </style>
+        <h1 class="main-title">.NET Code Contracts</h1>
     </section>
     <section class="slide">
-        <h2>Shower key features</h2>
-        <ol>
-            <li>Built on HTML, CSS and vanilla JavaScript</li>
-            <li>Works in all modern browsers</li>
-            <li>Themes are separated from engine</li>
-            <li>Modular and extensible</li>
-            <li>Fully keyboard accessible</li>
-            <li>Printable to PDF</li>
-        </ol>
-        <p class="note">Shower ['ʃəuə] noun. A person or thing that shows.</p>
+        <code>// The .NET Foundation licenses this file to you under the MIT license.
+
+namespace System.Diagnostics.Contracts
+{
+    public static class Contract
+    {
+        event EventHandler&lt;ContractFailedEventArgs&gt; ContractFailed { add { } remove { } }
+        void Assert(bool condition, string userMessage) { }
+        void Assume(bool condition, string userMessage) { }
+        void Ensures(bool condition, string userMessage) { }
+        void EnsuresOnThrow&lt;TException&gt;(bool condition, string userMessage) 
+            where TException : Exception { }
+        bool Exists&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { throw null; }
+        bool ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { throw null; }
+        void Invariant(bool condition, string userMessage) { }
+        T OldValue&lt;T&gt;(T value) { throw null; }
+        void Requires(bool condition, string userMessage) { }
+        void Requires&lt;TException&gt;(bool condition, string userMessage) 
+            where TException : Exception { }
+        T Result&lt;T&gt;() { throw null; }
+        T ValueAtReturn&lt;T&gt;(out T value) { throw null; }
+    }
+    public class PureAttribute : Attribute { }
+}</code>
     </section>
     <section class="slide">
         <h2>Plain text on your slides</h2>
@@ -179,17 +224,9 @@
 
         </style>
     </section>
-    <p class="badge">
-        <a href="https://github.com/shower/shower">Fork me on GitHub</a>
-    </p>
-    <!--
-		To hide progress bar from entire presentation
-		just remove “progress” element.
-		-->
+    <footer>.NET Code Contracts / Adam Gołębiowski</footer>
     <div class="progress"></div>
     <script src="shower/shower.min.js"></script>
-    <!-- Copyright © 2015 Yours Truly, Famous Inc. -->
-    <!-- Photos by John Carey, fiftyfootshadows.net -->
 </body>
 
 </html>

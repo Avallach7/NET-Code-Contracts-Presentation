@@ -1,0 +1,56 @@
+
+
+# What is contract programming?
+# How .NET contract are implemented?
+Contract methods are declared in .NET Base Class Library in static class System.Diagnostics.Contracts.Contract. All of them are just stubs, and nearly all of them are compiled conditionally only if “CONTRACTS_FULL” is defined. If compiled “normally”, they do nothing and does not affect performance nor assembly size. 
+Instead, code containing contracts can be processed with two kinds of tools:
+ - Binary rewriter (CCRewrite) - takes compiled assembly and inserts into it bytecode actually validating the contract in runtime, which often could be quite long if implemented by hand
+ - Static checker - analyses the code flow and reports violations that can be spotted without running the application
+Open source implementations of both are available at https://github.com/Microsoft/CodeContracts.
+
+# Current and future support in .NET Framework
+Code Contracts were developed as research project at Microsoft. They were used by many internal and external projects, such as Entity Framework, and their interface is part of .NET Core.  
+Unfortunately there are currently no plans to provide rewriter and static checker for .NET Core. 
+
+# Resources
+ - Documentation @ Microsoft Developer Network: https://msdn.microsoft.com/en-us/library/system.diagnostics.contracts.contract.aspx
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+https://docs.google.com/presentation/d/1OrSl6ZBTVU4I125XhobZiYoOR9CB3d3iYqOGXrkEv2U/edit#slide=id.g23d70d1909_0_665 | .NET Code Contracts - Google Slides
+http://www.dotnetcurry.com/csharp/1172/code-contracts-csharp-static-runtime-checks | Code Contracts in C# | DotNetCurry
+https://github.com/Microsoft/CodeContracts/issues/231 | CodeContracts fail with CONTRATS_FULL reference in ASP.net vNext · Issue #231 · Microsoft/CodeContracts
+https://github.com/dotnet/project-system/issues/988 | Enable code analysis · Issue #988 · dotnet/project-system
+https://github.com/Microsoft/CodeContracts/issues/409 | What does the Future of Code Contracts Look Like? · Issue #409 · Microsoft/CodeContracts
+https://github.com/aspnet/EntityFramework/issues/6533 | replace JetBrains Annotations with CodeContracts. · Issue #6533 · aspnet/EntityFramework
+http://entityframework.codeplex.com/wikipage?title=Design%20Meeting%20Notes%20-%20October%2025%2c%202012 | Entity Framework - Documentation
+https://github.com/dotnet/corefx/blob/bffef76f6af208e2042a2f27bc081ee908bb390b/src/Common/src/Microsoft/Internal/Requires.cs | corefx/Requires.cs at bffef76f6af208e2042a2f27bc081ee908bb390b · dotnet/corefx
+http://designpattern.ninja/news/2017/01/09/dotnet-code-contracts-are-fading-out.html | Design pattern NINJA: .NET Code Contracts are fading out
+https://pepelsbey.net/pres/web-apps/ | Ещё лучше, чем настоящие! — Пепелсбей.net
+https://github.com/shower/shower | shower/shower: Shower HTML presentation engine
+https://github.com/shower/shower/blob/master/docs/features.md | shower/features.md at master · shower/shower
+https://slides.com/ | Slides – Create and share presentations online
+https://fonts.google.com/?category=Serif&sort=popularity&subset=latin-ext&selection.family=Roboto+Slab:100,300,400,700|Roboto:100,300,500,900&query=slab | Google Fonts
+https://jakdojade.pl/wroclaw/trasa/z--Boles%C5%82awiecka-9--do--Jedno%C5%9Bci-Narodowej-797?fn=Boles%C5%82awiecka%209&tn=Jedno%C5%9Bci%20Narodowej%2079~2F7&tc=51.120956:17.041778&fc=51.11518:17.000293&ft=LOCATION_TYPE_ADDRESS&tt=LOCATION_TYPE_ADDRESS&d=12.07.17&h=21:06&aro=0&t=1&rc=3&ri=1&r=0 | Jakdojade
+http://127.0.0.1:34491/index.html#3 | Plain text on your slides — .NET Code Contracts
+https://stackoverflow.com/questions/6519650/how-to-display-html-tags-without-escaping-nightmare | how to display < html tags without escaping nightmare - Stack Overflow
+http://accessify.com/tools-and-wizards/developer-tools/quick-escape/default.php | Quick Escape - A tool to convert raw HTML to escape characters | Developer Tools | Accessify
+https://stackoverflow.com/questions/373324/how-to-escape-everything-in-a-block-in-html | escaping - How to escape everything in a block in HTML - Stack Overflow
+https://stackoverflow.com/questions/1398571/html-inside-xml-should-i-use-cdata-or-encode-the-html | Html inside XML. Should I use CDATA or encode the HTML - Stack Overflow
+https://stackoverflow.com/questions/16783708/how-to-display-raw-html-code-in-pre-or-something-like-it-but-without-escaping-it | How to display raw html code in PRE or something like it but without escaping it - Stack Overflow
+http://127.0.0.1:34491/index.html#2 | .NET Code Contracts
+https://stackoverflow.com/questions/12851792/why-cant-i-decrease-the-line-height-of-this-text | css - Why can't I decrease the line-height of this text? - Stack Overflow
+https://drive.google.com/drive/folders/0B6YPF9NzId9SeGpPVUx1TlBXS1E | nvm - Google Drive
+https://docs.google.com/document/d/1B1r5o2f1ST9WJ5yW2o-VJD0t9VjA3XcYnEBc1Sl6KyQ/edit#heading=h.t15csdqlaro6 | C# code contracts - Google Docs
+https://docs.google.com/document/d/1jvTpXmFi9wMZGneQwL24lSCWpiIl52dEMQB-fDP1PU4/edit# | text - Google Docs
+http://www.dotnetcurry.com/csharp/1172/code-contracts-csharp-static-runtime-checks | Code Contracts in C# | DotNetCurry
