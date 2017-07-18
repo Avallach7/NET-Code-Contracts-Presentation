@@ -10,6 +10,13 @@
     <style>
         body {
             margin: 0;
+            user-select: none;
+            cursor: crosshair !important;
+        }
+        
+        ::selection {
+            color: inherit;
+            background: transparent;
         }
         
         section {
@@ -21,6 +28,7 @@
             background: #1c7ef5;
             color: white;
             font-family: 'Roboto', sans-serif;
+            display: none;
         }
         
         section::after {
@@ -44,11 +52,21 @@
 
     </style>
     <script>
-        document.addEventListener("load", function() {
-            document.app.activeSlideId = 0;
+        document.app = {};
+        function showCurrentSlide() {
+            document.app.slides[document.app.activeSlideId].style.display = "block";
+        }
+        
+        window.addEventListener("load", function() {
             document.app.slides = document.getElementsByTagName("section");
+            document.app.activeSlideId = 0;
+            showCurrentSlide();
             document.body.addEventListener("click", function() {
-                document.app.slides[document.app.activeSlideId].style.display
+                document.app.slides[document.app.activeSlideId].style.display = "none";
+                document.app.activeSlideId++;
+                if (document.app.activeSlideId >= document.app.slides.length)
+                    document.app.activeSlideId = 0;
+                showCurrentSlide();
             });
         });
 
@@ -62,6 +80,12 @@
     </header>
     <section>
         <h1>.NET Code Contracts</h1>
+    </section>
+    <section>
+        <h1>Slide 2</h1>
+    </section>
+    <section>
+        <h1>Slide 3</h1>
     </section>
 </body>
 
