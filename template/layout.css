@@ -1,0 +1,87 @@
+/*layout*/
+body {
+    --text-scale: 0.45;
+    --aspect-ratio: 1.78;
+    width: calc(100vh * var(--aspect-ratio));
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+@media (min-aspect-ratio: 16/9) {
+    body {
+        font-size: calc(10vh * var(--aspect-ratio) * var(--text-scale));
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    body {
+        font-size: calc(10vw * var(--text-scale));
+    }
+}
+
+section {
+    overflow: hidden;
+    counter-increment: slide;
+    box-sizing: border-box;
+    height: 100vh;
+    max-height: calc(100vw / var(--aspect-ratio));
+    padding: 1.5em 1.5em;
+    text-align: center;
+    page-break-after: always;
+    page-break-inside: avoid;
+    page-break-before: always;
+    position: relative;
+}
+
+section::after {
+    position: absolute;
+    left: 5vw;
+    bottom: 5vh;
+    content: counter(slide);
+}
+
+section h1 {
+    margin: 0;
+    margin-bottom: 0.7em;
+}
+
+section.title>h1 {
+    margin: 0;
+    position: relative;
+    top: calc(50% - 1em);
+}
+
+section code {
+    white-space: pre-wrap;
+    display: inline-block;
+    text-align: left;
+}
+
+@media print {
+    body {
+        background: black !important;
+        margin: 0;
+    }
+
+    @page{
+        margin: 0;
+        size: landscape;
+        size: 12in 19in landscape;
+    }
+}
+
+/*misc*/
+body {
+    user-select: none;
+    overflow: hidden;
+}
+
+::selection {
+    color: inherit;
+    background: transparent;
+}
+
+section {
+    cursor: pointer !important;
+}
