@@ -7,11 +7,23 @@ body {
     background: var(--background-color);
 }
 
+body:after {
+    display: block;
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('bg.svg');
+    background-size: cover;
+}
+
 section {
     background: var(--background-color);
     color: var(--content-color);
     font-family: 'Roboto', sans-serif;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+/*    border: 1px solid rgba(0, 0, 0, 0.1);*/
     margin: 0 auto;
     font-weight: 100;
     line-height: 1.8em;

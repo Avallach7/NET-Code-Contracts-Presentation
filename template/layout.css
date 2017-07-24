@@ -32,7 +32,7 @@ section {
     position: relative;
 }
 
-section::after {
+section:not(.title)::after {
     position: absolute;
     right: 5vw;
     bottom: 5vh;
