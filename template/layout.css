@@ -39,7 +39,13 @@ section:not(.title)::after {
     content: counter(slide);
 }
 
+section[data-title]:before {
+    content: attr(data-title);
+}
+
+section[data-title]:before,
 section h1 {
+    display: block;
     margin: 0;
     margin-bottom: 0.7em;
     text-align: center;
@@ -76,12 +82,17 @@ section footer {
 
 /*misc*/
 body {
-    user-select: none;
-    overflow: hidden;
     cursor: pointer !important;
+    overflow: hidden;
+}
+
+/*
+body {
+    user-select: none;
 }
 
 ::selection {
     color: inherit;
     background: transparent;
 }
+*/

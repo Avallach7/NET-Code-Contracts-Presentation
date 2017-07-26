@@ -15,45 +15,36 @@
     <section class="title">
         <h1>.NET Code Contracts</h1>
     </section>
-    <section>
-        <h1>Implementation in .NET</h1>
-        Modules:
+    <section data-title="Implementation in .NET">
         <ul>
-            <li>Contract method stubs (in base class library)</li>
-            <li>Static checker</li>
-            <li>Binarty rewriter</li>
-            <li>Documentation generator</li>
-        </ul>
-        Sources available at:
-        <ul>
-            <li>github.com/dotnet/corefx/.../System.Diagnostics.Contracts</li>
-            <li>github.com/Microsoft/CodeContracts</li>
-        </ul>
-    </section>
-    <section>
-        <h1>Installation</h1>
-        Modules:
-        <ul>
-            <li>Contract method stubs (in base class library)</li>
-            <li>Static checker</li>
-            <li>Binarty rewriter</li>
-            <li>Documentation generator</li>
-        </ul>
-        Sources available at:
-        <ul>
-            <li>github.com/dotnet/corefx/.../System.Diagnostics.Contracts</li>
-            <li>github.com/Microsoft/CodeContracts</li>
+            <li>System.Diagnostics.Contracts
+                <ul>
+                    <li>Contract method stubs</li>
+                    <li>Source: github.com/dotnet/corefx/.../System.Diagnostics.Contracts</li>
+                </ul>
+            </li>
+            <li>DotNet.Contracts
+                <ul>
+                    <li>Static checker</li>
+                    <li>Binarty rewriter</li>
+                    <li>Documentation generator</li>
+                    <li>Source: github.com/Microsoft/CodeContracts</li>
+                </ul>
+            </li>
         </ul>
     </section>
-    <section>
-        <h1>Contract method stubs</h1>
+    <section data-title="Contract method stubs" class="code">
         <style>
-            section code.reference-source {
+            section[data-title="Contract method stubs"].code {
+                text-align: center;
+            }
+            
+            section[data-title="Contract method stubs"].code code {
                 font-size: 0.4em;
                 display: inline-block;
             }
         </style>
-        <code class="reference-source">// The .NET Foundation licenses this file to you under the MIT license.
+        <code>// The .NET Foundation licenses this file to you under the MIT license.
 
 namespace <strong>System.Diagnostics.Contracts</strong>
 {
@@ -78,8 +69,7 @@ namespace <strong>System.Diagnostics.Contracts</strong>
     public class <strong>Pure</strong>Attribute : Attribute { }
 }</code>
     </section>
-    <section>
-        <h1>Contract method stubs</h1>
+    <section data-title="Contract method stubs">
         <ul>
             <li>Designed to do nothing when contracts are not rewritten</li>
             <li>Assertion methods are empty and compiled conditionally:
@@ -94,19 +84,17 @@ bool inputsValid = <strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</stron
 </code></li>
         </ul>
     </section>
-    <section>
-        <h1>Static checker</h1>
+    <section data-title="Static checker">
         <ul>
             <li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
-            <li>Suggests contracts where they are not declared but can be deduced:
+            <li>Suggests contracts where they are not declared but can be deduced (implicit contracts):
 <code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
         </ul>
     </section>
-    <section>
-        <h1>.NET Core support</h1>
+    <section data-title=".NET Core support">
         <ul>
-            <li>Microsoft doesn't plan to maintain Contracts for .NET Core</li>
-            <li>Port / reimplementation by community is expected</li>
+            <li>Microsoft doesn't plan to maintain toolset for .NET Core - just interface</li>
+            <li>Port / reimplementation by community is needed</li>
             <li>Using Roslyn (Microsoft.CodeAnalysis @ NuGet) could help a lot</li>
             <li>Fody (based on Mono.Cecil and Microsoft.Build.Framework) allows similar IL modifications</li>
         </ul>
