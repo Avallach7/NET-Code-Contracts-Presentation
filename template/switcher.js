@@ -6,11 +6,13 @@ function setCurrentSlideVisibility(visible) {
     console.log(`slide ${document.app.activeSlideId+1} shown`);
 }
 
-function changeSlide() {
+function changeSlide(event) {
     setCurrentSlideVisibility(false);
-    document.app.activeSlideId++;
+    document.app.activeSlideId += (event instanceof WheelEvent && event.deltaY < 0) ? -1 : 1;
     if (document.app.activeSlideId >= document.app.slides.length)
         document.app.activeSlideId = 0;
+    else if (document.app.activeSlideId < 0)
+        document.app.activeSlideId = document.app.slides.length-1;
     setCurrentSlideVisibility(true);
 }
 

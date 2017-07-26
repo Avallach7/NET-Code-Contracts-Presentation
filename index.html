@@ -17,24 +17,40 @@
     </section>
     <section>
         <h1>Implementation in .NET</h1>
+        Modules:
         <ul>
-            <li>Contract method stubs (in BCL)</li>
+            <li>Contract method stubs (in base class library)</li>
             <li>Static checker</li>
             <li>Binarty rewriter</li>
+            <li>Documentation generator</li>
         </ul>
-        <footer>Sources at github.com/Microsoft/CodeContracts</footer>
+        Sources available at:
+        <ul>
+            <li>github.com/dotnet/corefx/.../System.Diagnostics.Contracts</li>
+            <li>github.com/Microsoft/CodeContracts</li>
+        </ul>
+    </section>
+    <section>
+        <h1>Installation</h1>
+        Modules:
+        <ul>
+            <li>Contract method stubs (in base class library)</li>
+            <li>Static checker</li>
+            <li>Binarty rewriter</li>
+            <li>Documentation generator</li>
+        </ul>
+        Sources available at:
+        <ul>
+            <li>github.com/dotnet/corefx/.../System.Diagnostics.Contracts</li>
+            <li>github.com/Microsoft/CodeContracts</li>
+        </ul>
     </section>
     <section>
         <h1>Contract method stubs</h1>
         <style>
             section code.reference-source {
-                color: #c9c9c9;
-                font-size: 0.35em;
-            }
-
-            section code.reference-source strong {
-                color: white;
-                font-weight: 800;
+                font-size: 0.4em;
+                display: inline-block;
             }
         </style>
         <code class="reference-source">// The .NET Foundation licenses this file to you under the MIT license.
@@ -61,7 +77,39 @@ namespace <strong>System.Diagnostics.Contracts</strong>
     }
     public class <strong>Pure</strong>Attribute : Attribute { }
 }</code>
-        <p style="font-size: 0.35em; margin: 0;">(source: github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs)</p>
+    </section>
+    <section>
+        <h1>Contract method stubs</h1>
+        <ul>
+            <li>Designed to do nothing when contracts are not rewritten</li>
+            <li>Assertion methods are empty and compiled conditionally:
+                <code>[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
+void Ensures(bool condition, string userMessage) <strong>{ }</strong></code></li>
+            <li>Helper methods throw if called without being rewritten:
+            <code>// returns, so cannot be [Conditional]
+<strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) <strong>{ throw null; }</strong></code></li>
+            <li>That's why they should only be used as inline parameters to assertions:
+            <code>Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // OK, will be rewritten or omitted
+bool inputsValid = <strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>; //ERROR, would throw without rewriting
+</code></li>
+        </ul>
+    </section>
+    <section>
+        <h1>Static checker</h1>
+        <ul>
+            <li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
+            <li>Suggests contracts where they are not declared but can be deduced:
+<code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
+        </ul>
+    </section>
+    <section>
+        <h1>.NET Core support</h1>
+        <ul>
+            <li>Microsoft doesn't plan to maintain Contracts for .NET Core</li>
+            <li>Port / reimplementation by community is expected</li>
+            <li>Using Roslyn (Microsoft.CodeAnalysis @ NuGet) could help a lot</li>
+            <li>Fody (based on Mono.Cecil and Microsoft.Build.Framework) allows similar IL modifications</li>
+        </ul>
     </section>
 </body>
 

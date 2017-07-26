@@ -25,7 +25,7 @@ section {
     width: calc(100vh * var(--aspect-ratio));
     max-width: 100%;
     padding: 2em 2.5em;
-    text-align: center;
+    text-align: left;
     page-break-after: always;
     page-break-inside: avoid;
     page-break-before: always;
@@ -42,6 +42,7 @@ section:not(.title)::after {
 section h1 {
     margin: 0;
     margin-bottom: 0.7em;
+    text-align: center;
 }
 
 section.title>h1 {
@@ -52,11 +53,7 @@ section.title>h1 {
 
 section code {
     white-space: pre-wrap;
-    display: inline-block;
-    text-align: left;
-}
-
-section ul {
+    display: block;
     text-align: left;
 }
 
