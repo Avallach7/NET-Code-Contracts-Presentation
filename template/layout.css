@@ -54,7 +54,7 @@ section h1 {
 section.title>h1 {
     margin: 0;
     position: relative;
-    top: calc(50% - 1em);
+    top: calc(50% - 0.5em);
 }
 
 section code {
@@ -71,6 +71,12 @@ section footer {
 @media print {
     body {
         background: black !important;
+    }
+    
+    section {
+        background: var(--background-color) url('template/bg.svg');
+        background-size: cover;
+        max-height: none;
     }
 
     @page{
