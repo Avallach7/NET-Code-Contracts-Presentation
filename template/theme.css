@@ -15,6 +15,7 @@ a {
 
 body {
     background: var(--background-color) url('template/bg.svg');
+    background: var(--background-color) url('template/cc-logo-2.png');
     background-size: cover;
     background-attachment: fixed;
 }
