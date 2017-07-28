@@ -34,12 +34,6 @@ section::after {
     font-weight: 100;
 }
 
-section.title>h1 {
-    font-family: 'Roboto Slab', serif;
-    font-weight: 100;
-    font-size: 3em;
-}
-
 section code {
     background: var(--background-color);
     color: rgba(255, 255, 255, 0.8);
@@ -59,6 +53,20 @@ section code strong {
 section[data-title]:before,
 section h1 {
     font-weight: 100;
-    font-family: 'Roboto Slab';
+    font-family: 'Roboto Slab', serif;
     font-size: 2.3em;
+}
+
+section[data-title]:hover:before {
+    background: white;
+    color: var(--background-color);
+    font-weight: 800;
+    display: inline-block;
+    padding: 0.1em 0.2em 0.2em 0.2em;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+section.title h1 {
+    font-size: 3em;
 }

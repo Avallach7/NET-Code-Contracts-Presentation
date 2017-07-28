@@ -26,9 +26,6 @@ section {
     max-width: 100%;
     padding: 2em 2.5em;
     text-align: left;
-    page-break-after: always;
-    page-break-inside: avoid;
-    page-break-before: always;
     position: relative;
 }
 
@@ -76,7 +73,9 @@ section footer {
     section {
         background: var(--background-color) url('template/bg.svg');
         background-size: cover;
-        max-height: none;
+        page-break-after: always;
+        page-break-inside: avoid;
+        page-break-before: always;
     }
 
     @page{
