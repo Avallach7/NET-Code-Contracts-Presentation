@@ -6,9 +6,15 @@ function setCurrentSlideVisibility(visible) {
     console.log(`slide ${document.app.activeSlideId+1} shown`);
 }
 
+function isScrollingBack(event) {
+    var backScrollingKeys = ["ArrowUp", "ArrowLeft", "PageUp"];
+    return (event instanceof WheelEvent && event.deltaY < 0) ||
+           (event instanceof KeyboardEvent && backScrollingKeys.indexOf(event.key) >= 0);
+}
+
 function changeSlide(event) {
     setCurrentSlideVisibility(false);
-    document.app.activeSlideId += (event instanceof WheelEvent && event.deltaY < 0) ? -1 : 1;
+    document.app.activeSlideId += isScrollingBack(event) ? -1 : 1;
     if (document.app.activeSlideId >= document.app.slides.length)
         document.app.activeSlideId = 0;
     else if (document.app.activeSlideId < 0)

@@ -65,6 +65,43 @@ section footer {
     bottom: 2em;
 }
 
+section .footnote-link,
+section sup {
+    vertical-align: super;
+}
+
+section .footnote-link:before,
+section sup:before {
+    content: " [";
+}
+
+section .footnote-link:after,
+section sup:after {
+    content: "]";
+}
+
+section .footnotes {
+    line-height: 1.7em;
+}
+
+section .footnote-link,
+section sup,
+section .footnotes {
+    font-size: 0.5em;
+    opacity: 0.5;
+}
+
+section .footnotes {
+    counter-reset: footnote-counter;
+    list-style-type: none;
+    padding: 0;
+}
+
+section .footnotes > *:before {
+	content: "[" counter(footnote-counter) "]  ";
+	counter-increment: footnote-counter;
+}
+
 @media print {
     body {
         background: black !important;
@@ -95,9 +132,9 @@ body {
 body {
     user-select: none;
 }
+*/
 
 ::selection {
     color: inherit;
     background: transparent;
 }
-*/

@@ -16,6 +16,35 @@
     <section class="title">
         <h1>.NET Code Contracts</h1>
     </section>
+    <section data-title="History">
+        <ul>
+            <li>Developed at Software Engineering division of Microsoft Research (RiSE)<sup>1</sup></li>
+            <li>Open sourced (MIT License) and released on GitHub<sup>2</sup></li>
+            <li>Added to Base Class Library (BCL)<sup>3</sup></li>
+            <li>Internally used in implementation of BCL of .NET Framework<sup>4</sup> and .NET Core<sup>5</sup></li>
+            <li>RiSE toolset supports only Visual Studio 2015 and Windows .NET Framework<sup>6</sup></li>
+            <li>.NET Core</li>
+            <ul>
+                <li>contains Contract interface<sup>7</sup> and failure handling code<sup>8</sup><sup>9</sup></li>
+                <li>for actual checking, community has to develop new toolset<sup>10</sup></li>
+                <li>Microsoft.CodeAnalysis (aka Roslyn)<sup>11</sup> or Fody<sup>12</sup> may be very helpful</li>
+            </ul>
+        </ul>
+        <ol class="footnotes">
+            <li><a href="https://www.microsoft.com/en-us/research/group/research-in-software-engineering-rise/">microsoft.com/.../research-in-software-engineering-rise</a></li>
+            <li><a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
+            <li><a href="http://referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs">referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs</a></li>
+            <li><a href="http://referencesource.microsoft.com/#mscorlib/system/array.cs,2904">referencesource.microsoft.com/#mscorlib/system/array.cs</a></li>
+            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Array.cs#L52">dotnet/coreclr/.../mscorlib/src/System/Array.cs</a></li>
+            <li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">marketplace.visualstudio.com/.../CodeContractsforNET</a></li>
+            <li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
+            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs</a></li>
+            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>    
+            <li><a href="https://github.com/Microsoft/CodeContracts/issues/409">github.com/Microsoft/CodeContracts/issues/409</a></li>
+            <li><a href="https://github.com/dotnet/roslyn">github.com/dotnet/roslyn</a></li>
+            <li><a href="https://github.com/Fody/Fody">github.com/Fody/Fody</a></li>
+        </ol>
+    </section>
     <section data-title="Contract packages">
         <ul>
             <li>System.Diagnostics.Contracts
@@ -27,27 +56,26 @@
             <li>DotNet.Contracts
                 <ul>
                     <li>Static checker</li>
-                    <li>Binarty rewriter</li>
+                    <li>Binary rewriter</li>
                     <li>Documentation generator</li>
                     <li>VS extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
-                    <li>Source: github.com/Microsoft/CodeContracts</li>
+                    <li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
                 </ul>
             </li>
         </ul>
     </section>
-    <section data-title="Contract method stubs" class="code">
+    <section data-title="Contract interface in BCL">
         <style>
-            section[data-title="Contract method stubs"].code {
+            section[data-title="Contract interface in BCL"] {
                 text-align: center;
             }
             
-            section[data-title="Contract method stubs"].code code {
+            section[data-title="Contract interface in BCL"] code {
                 font-size: 0.4em;
                 display: inline-block;
             }
         </style>
         <code>// The .NET Foundation licenses this file to you under the MIT license.
-
 namespace <strong>System.Diagnostics.Contracts</strong>
 {
     public static class <strong>Contract</strong>
@@ -58,32 +86,34 @@ namespace <strong>System.Diagnostics.Contracts</strong>
         void <strong>Ensures</strong>(bool condition, string userMessage) { }
         void <strong>EnsuresOnThrow&lt;TException&gt;</strong>(bool condition, string userMessage)
             where TException : Exception { }
-        bool <strong>Exists&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { throw null; }
-        bool <strong>ForAll&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { throw null; }
+        bool <strong>Exists&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { ... }
+        bool <strong>ForAll&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { ... }
         void <strong>Invariant</strong>(bool condition, string userMessage) { }
-        T <strong>OldValue&lt;T&gt;</strong>(T value) { throw null; }
+        T <strong>OldValue&lt;T&gt;</strong>(T value) { ... }
         void <strong>Requires</strong>(bool condition, string userMessage) { }
         void <strong>Requires&lt;TException&gt;</strong>(bool condition, string userMessage) 
             where TException : Exception { }
-        T <strong>Result&lt;T&gt;</strong>() { throw null; }
-        T <strong>ValueAtReturn&lt;T&gt;</strong>(out T value) { throw null; }
+        T <strong>Result&lt;T&gt;</strong>() { ... }
+        T <strong>ValueAtReturn&lt;T&gt;</strong>(out T value) { ... }
     }
     public class <strong>Pure</strong>Attribute : Attribute { }
 }</code>
     </section>
     <section data-title="Contract method stubs">
         <ul>
-            <li>Designed to do nothing when contracts are not rewritten</li>
-            <li>Assertion methods are empty and compiled conditionally:
+            <li>Designed to do nothing when runtime checking is off (no performance overhead!)</li>
+            <li>Assertion methods are compiled conditionally:
                 <code>[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
-void Ensures(bool condition, string userMessage) <strong>{ }</strong></code></li>
-            <li>Helper methods throw if called without being rewritten:
+void Ensures(bool condition, string userMessage) {...}</code></li>
+            <li>Helper methods should only be used as their inline parameters:
             <code>// returns, so cannot be [Conditional]
-<strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) <strong>{ throw null; }</strong></code></li>
-            <li>That's why they should only be used as inline parameters to assertions:
-            <code>Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // OK, will be rewritten or omitted
-bool inputsValid = <strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>; //ERROR, would throw without rewriting
-</code></li>
+<strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
+Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // both will be either rewritten or omitted</code></li>
+            <li>"Hacking" Contract methods to run <strong>without rewriter</strong> results in unspecified behaviour:
+                <code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. always return true)
+<strong>#define DEBUG
+#define CONTRACTS_FULL</strong>
+Contract.Requires(true); // ERROR (may e.g. do nothing, throw or display GUI error window)</code></li>
         </ul>
     </section>
     <section data-title="Static checker">
@@ -93,13 +123,34 @@ bool inputsValid = <strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</stron
 <code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
         </ul>
     </section>
-    <section data-title=".NET Core support">
+    <section data-title="Rewriter & runtime checks">
         <ul>
-            <li>Microsoft doesn't plan to maintain toolset for .NET Core - just interface</li>
-            <li>Port / reimplementation by community is needed</li>
-            <li>Using Roslyn (Microsoft.CodeAnalysis @ NuGet) could help a lot</li>
-            <li>Fody (based on Mono.Cecil and Microsoft.Build.Framework) allows similar IL modifications</li>
+            <li>Conditional compilation symbols are defined:
+                <code>#define DEBUG
+#define CONTRACTS_FULL</code></li>
+            <li>ContractsRuntime class is injected into assembly</li>
+            <li>Calls to Contract.* are replaced by calls to ContractsRuntime.*</li>
+            <li>ContractsRuntime methods do actual check and react on failure<ul>
+                <li>call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent<sup>1</sup><sup>2</sup></li>
+                <li>which calls registered handlers and native runtime-specific method (e.g. displaying error window)<sup>3</sup><sup>4</sup></li>
+                <li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException</li>
+            </ul></li>
         </ul>
+        <ol class="footnotes">
+            <li><a id="raisecontractfailedevent" href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs#L852">dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts/RaiseContractFailedEvent</a></li>
+            <li><a id="raisecontractfailedeventimplementation" href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs#L295">dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL/RaiseContractFailedEventImplementation</a></li>
+            <li><a id="eepolicy" href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556">dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure</a></li>
+            <li><a id="eventreporter" href="https://github.com/dotnet/coreclr/blob/master/src/vm/eventreporter.cpp#L155">dotnet/coreclr/.../vm/eventreporter/ERT_CodeContractFailed</a></li>
+        </ol>
+    </section>
+    <section data-title="__ContractsRuntime">
+        <code>class ContractException : Exception
+{
+    public ContractFailureKind Kind { get; }
+    public string Failure { get; }
+    public string UserMessage { get; }
+    public string Condition { get; }
+}</code>
     </section>
 </body>
 

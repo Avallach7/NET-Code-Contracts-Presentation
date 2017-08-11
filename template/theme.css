@@ -4,7 +4,7 @@
 body {
     --background-color: #1c7ff7;
     --content-color: white;
-    --text-scale: 2.3;
+    --text-scale: 2.0;
     background: var(--background-color);
 }
 
@@ -14,8 +14,8 @@ a {
 }
 
 body {
-    background: var(--background-color) url('template/bg.svg');
-    background: var(--background-color) url('template/cc-logo-2.png');
+    background: var(--background-color) url('bg.svg');
+    background: var(--background-color) url('cc-logo-2.png');
     background-size: cover;
     background-attachment: fixed;
 }
@@ -58,6 +58,7 @@ section h1 {
     font-size: 2.3em;
 }
 
+/*
 section[data-title]:hover:before {
     background: white;
     color: var(--background-color);
@@ -67,6 +68,7 @@ section[data-title]:hover:before {
     margin-bottom: 0;
     text-align: left;
 }
+*/
 
 section.title h1 {
     font-size: 3em;
