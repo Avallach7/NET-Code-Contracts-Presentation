@@ -17,6 +17,9 @@ body {
 }
 
 section {
+    --horizontal-padding: 2.5em;
+    --vertical-padding: 2em;
+    
     overflow: hidden;
     counter-increment: slide;
     box-sizing: border-box;
@@ -24,12 +27,12 @@ section {
     max-height: calc(100vw / var(--aspect-ratio));
     width: calc(100vh * var(--aspect-ratio));
     max-width: 100%;
-    padding: 2em 2.5em;
+    padding: var(--vertical-padding) var(--horizontal-padding);
     text-align: left;
     position: relative;
 }
 
-section:not(.title)::after {
+section:not(:empty)::after {
     position: absolute;
     right: 5vw;
     bottom: 5vh;
@@ -38,18 +41,13 @@ section:not(.title)::after {
 
 section[data-title]:before {
     content: attr(data-title);
-}
-
-section[data-title]:before,
-section h1 {
     display: block;
     margin: 0;
     margin-bottom: 0.7em;
     text-align: center;
 }
 
-section.title>h1 {
-    margin: 0;
+section[data-title]:empty:before {
     position: relative;
     top: calc(50% - 0.5em);
 }
@@ -95,6 +93,8 @@ section .footnotes {
     counter-reset: footnote-counter;
     list-style-type: none;
     padding: 0;
+    position: absolute;
+    bottom: var(--vertical-padding);
 }
 
 section .footnotes > *:before {
@@ -120,6 +120,10 @@ section .footnotes > *:before {
         size: landscape;
         size: 12in 19in landscape;
     }
+}
+
+section.agenda ol {
+    list-style-type: none;
 }
 
 /*misc*/
