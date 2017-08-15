@@ -170,6 +170,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or display GUI err
                     <li>Result</li>
                     <li>ValueAtReturn</li>
                     <li>ContractClassFor</li>
+                    <li>ContractAbbreviator</li>
                 </ul>
             </li>
         </ul>
@@ -187,7 +188,8 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or display GUI err
         <ul>
             <li>Contract.Result is already moved to the end of method with enclosing Ensures and replaced by reference to previously generated result variable, that is going to be returned afterwards</li>
             <li>Contract.ValueAtReturn is moved the same way as Result, and replaced by reference passed to it as parameter (theoretically it could be any expression, as its literally executed just before return)</li>
-            <li>Contract.ContractClassFor causes all method bodies in type marked with it to be prepended to their counterparts in type passed as parameter to it</li>
+            <li>ContractClassFor attribute causes all method bodies in type marked with it to be prepended to their counterparts in type passed as parameter to it</li>
+            <li>ContractAbbreviator attribute causes body of method marked with it to be inlined in place of calls to it, so that it can contains contract shared by multiple methods</li>
         </ul>
     </section>
     <section data-title="Runtime internals">
