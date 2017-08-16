@@ -10,6 +10,7 @@ namespace System.Diagnostics.Contracts
         [ThreadStatic]
         internal static int insideContractEvaluation;
 
+        [DebuggerNonUserCode]
         internal static void ReportFailure(ContractFailureKind kind, string msg, string conditionTxt, Exception inner)
         {
             string text = ContractHelper.RaiseContractFailedEvent(kind, msg, conditionTxt, inner);

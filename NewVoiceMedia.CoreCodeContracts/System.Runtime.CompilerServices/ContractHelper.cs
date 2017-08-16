@@ -290,11 +290,8 @@ namespace System.Runtime.CompilerServices
             // }
 
 			// Source: https://github.com/Microsoft/CodeContracts/blob/master/Foxtrot/Contracts/ContractsMSR.cs
-			var failureMessage = myResourceManager.GetString(resourceName);
-            if (failureMessage == null)
-            { // Hack for pre-V4 CLR�s
-                failureMessage = String.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0} failed", failureKind);
-            }
+            var failureMessage = String.Format(System.Globalization.CultureInfo.CurrentUICulture, "{0} failed",
+                failureKind);
             // Now format based on presence of condition/userProvidedMessage
             if (!String.IsNullOrEmpty(conditionText))
             {
