@@ -21,15 +21,15 @@ namespace System.Diagnostics.Contracts
         public string Condition { get { return _Condition; } }
 
         // Called by COM Interop, if we see COR_E_CODECONTRACTFAILED as an HRESULT.
-        // private ContractException()
-        // {
-        //     HResult = System.Runtime.CompilerServices.ContractHelper.COR_E_CODECONTRACTFAILED;
-        // }
+        private ContractException()
+        {
+            HResult = System.Runtime.CompilerServices.ContractHelper.COR_E_CODECONTRACTFAILED;
+        }
 
         public ContractException(ContractFailureKind kind, string failure, string userMessage, string condition, Exception innerException)
             : base(failure, innerException)
         {
-            // HResult = System.Runtime.CompilerServices.ContractHelper.COR_E_CODECONTRACTFAILED;
+            HResult = System.Runtime.CompilerServices.ContractHelper.COR_E_CODECONTRACTFAILED;
             _Kind = kind;
             _UserMessage = userMessage;
             _Condition = condition;

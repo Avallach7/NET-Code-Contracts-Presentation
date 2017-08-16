@@ -133,9 +133,11 @@ namespace System.Runtime.CompilerServices
 #endif
         static partial void RaiseContractFailedEventImplementation(ContractFailureKind failureKind, String userMessage, String conditionText, Exception innerException, ref string resultFailureMessage)
         {
-            // if (failureKind < ContractFailureKind.Precondition || failureKind > ContractFailureKind.Assume)
-            //     throw new ArgumentException(SR.Format(SR.Arg_EnumIllegalVal, failureKind), nameof(failureKind));
-            // Contract.EndContractBlock();
+            if (failureKind < ContractFailureKind.Precondition || failureKind > ContractFailureKind.Assume)
+				// throw new ArgumentException(SR.Format(SR.Arg_EnumIllegalVal, failureKind), nameof(failureKind));
+				// Source: https://github.com/Microsoft/CodeContracts/blob/master/Foxtrot/Contracts/ContractsMSR.cs
+				throw new ArgumentException("failureKind is not in range", "failureKind");
+            Contract.EndContractBlock();
 
             string returnValue;
             String displayMessage = "contract failed.";  // Incomplete, but in case of OOM during resource lookup...
@@ -201,14 +203,26 @@ namespace System.Runtime.CompilerServices
             // "Assert On Failure" but used in a process that can't pop up asserts, like an 
             // NT Service).
 
-            if (!Debugger.IsAttached)// if (!Environment.UserInteractive)
-            {
-                throw new ContractException(kind, displayMessage, userMessage, conditionText, innerException);
-            }
-			else
-			{
+            if (Debugger.IsAttached)
 				Debug.Fail(conditionText, displayMessage);
-			}
+			else
+				throw new ContractException(kind, displayMessage, userMessage, conditionText, innerException);
+
+			// Source: https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs
+            // if (!Environment.UserInteractive)
+            // {
+            //     throw new ContractException(kind, displayMessage, userMessage, conditionText, innerException);
+            // }
+            // // May need to rethink Assert.Fail w/ TaskDialogIndirect as a model.
+            // System.Diagnostics.Assert.Fail(conditionText, displayMessage, SR.GetResourceString(GetResourceNameForFailure(kind)), COR_E_CODECONTRACTFAILED, StackTrace.TraceFormat.Normal, 2);
+            // // If we got here, the user selected Ignore.  Continue.
+			
+			// Source: https://github.com/Microsoft/CodeContracts/blob/master/Foxtrot/Contracts/ContractsMSR.cs
+            // if (!Environment.UserInteractive)
+            // {
+            //     Environment.FailFast(displayMessage);
+            // }
+            // Debug.Assert(false, displayMessage);
 
             // May need to rethink Assert.Fail w/ TaskDialogIndirect as a model.  Window title.  Main instruction.  Content.  Expanded info.
             // Optional info like string for collapsed text vs. expanded text.
