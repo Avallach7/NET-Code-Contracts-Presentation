@@ -3,6 +3,14 @@ using System.Diagnostics.Contracts;
 
 namespace DotNet.Core.Contracts
 {
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
+
 	// based on https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs
 	public interface IContract
     {
