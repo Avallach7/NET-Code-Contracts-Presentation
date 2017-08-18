@@ -7,6 +7,8 @@ namespace DotNet.Core.Contracts
     {
         static void Main(string[] args)
         {
+            Contract.Requires(args.Length < 2);
+            //__ContractsRuntime.Requires(args.Length < 2, null, "true == false");
             Console.WriteLine("Hello World!");
         }
     }

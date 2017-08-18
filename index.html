@@ -63,15 +63,16 @@
     </section>
     <section data-title=".NET Core support">
         <ul>
-            <li>source code repository contains both Contract interface<sup>1</sup> and failure handling code for runtime checking<sup>2</sup><sup>3</sup></li>
-            <li>all this code is compiled conditionally and disabled by default (inaccessible in public builds)</li>
+            <li>source code repository contains implementation of Contracts class<sup>1</sup> and failure handling code for runtime checking<sup>2</sup></li>
+            <li>this code is inaccessible in public builds, and instead stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup></li>
             <li>such built-in runtime support is not required, but community still has to develop new toolset<sup>4</sup></li>
             <li>Microsoft.CodeAnalysis (aka Roslyn)<sup>5</sup> or Fody<sup>6</sup> may be very helpful</li>
         </ul>
         <ol class="footnotes">
-            <li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
             <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs</a></li>
-            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>    
+            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>   
+            <li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
+            
             <li><a href="https://github.com/Microsoft/CodeContracts/issues/409">github.com/Microsoft/CodeContracts/issues/409</a></li>
             <li><a href="https://github.com/dotnet/roslyn">github.com/dotnet/roslyn</a></li>
             <li><a href="https://github.com/Fody/Fody">github.com/Fody/Fody</a></li>
@@ -81,16 +82,18 @@
         <ul>
             <li>System.Diagnostics.Contracts
                 <ul>
-                    <li>All methods are stubbed</li>
-                    <li>Source: github.com/dotnet/corefx/.../System.Diagnostics.Contracts</li>
+                    <li>.NET Core compatible</li>
+                    <li>All methods are stubbed (does nothing)</li>
+                    <li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
                 </ul>
             </li>
             <li>DotNet.Contracts
                 <ul>
+                    <li>.NET Core incompatible</li>
                     <li>Static checker</li>
-                    <li>Binary rewriter</li>
+                    <li>Runtime checker</li>
                     <li>Documentation generator</li>
-                    <li>VS extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
+                    <li>VS2015 extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
                     <li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
                 </ul>
             </li>
@@ -118,15 +121,15 @@ namespace <strong>System.Diagnostics.Contracts</strong>
         void <strong>Ensures</strong>(bool condition, string userMessage) { }
         void <strong>EnsuresOnThrow&lt;TException&gt;</strong>(bool condition, string userMessage)
             where TException : Exception { }
-        bool <strong>Exists&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { ... }
-        bool <strong>ForAll&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { ... }
+        bool <strong>Exists&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
+        bool <strong>ForAll&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
         void <strong>Invariant</strong>(bool condition, string userMessage) { }
-        T <strong>OldValue&lt;T&gt;</strong>(T value) { ... }
+        T <strong>OldValue&lt;T&gt;</strong>(T value) { return default(T); }
         void <strong>Requires</strong>(bool condition, string userMessage) { }
         void <strong>Requires&lt;TException&gt;</strong>(bool condition, string userMessage) 
             where TException : Exception { }
-        T <strong>Result&lt;T&gt;</strong>() { ... }
-        T <strong>ValueAtReturn&lt;T&gt;</strong>(out T value) { ... }
+        T <strong>Result&lt;T&gt;</strong>() { return default(T); }
+        T <strong>ValueAtReturn&lt;T&gt;</strong>(out T value) { value = default(T); return value; }
     }
     public class <strong>Pure</strong>Attribute : Attribute { }
 }</code>
@@ -142,10 +145,10 @@ void Ensures(bool condition, string userMessage) {...}</code></li>
 <strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
 Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // both will be either rewritten or omitted</code></li>
             <li>"Hacking" Contract methods to run <strong>without rewriter</strong> results in unspecified behaviour:
-                <code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. always return true)
+                <code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. throw or always return false)
 <strong>#define DEBUG
 #define CONTRACTS_FULL</strong>
-Contract.Requires(true); // ERROR (may e.g. do nothing, throw or display GUI error window)</code></li>
+Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)</code></li>
         </ul>
     </section>
     <section data-title="Static checker">
