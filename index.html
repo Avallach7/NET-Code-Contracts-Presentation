@@ -67,12 +67,12 @@
             <li>this code is inaccessible in public builds, and instead stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup></li>
             <li>such built-in runtime support is not required, but community still has to develop new toolset<sup>4</sup></li>
             <li>Microsoft.CodeAnalysis (aka Roslyn)<sup>5</sup> or Fody<sup>6</sup> may be very helpful</li>
+            <li>later during this presentation, I'll show proof-of-concept reimplementation for Core using Roslyn</li>
         </ul>
         <ol class="footnotes">
             <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs</a></li>
             <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>   
             <li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
-            
             <li><a href="https://github.com/Microsoft/CodeContracts/issues/409">github.com/Microsoft/CodeContracts/issues/409</a></li>
             <li><a href="https://github.com/dotnet/roslyn">github.com/dotnet/roslyn</a></li>
             <li><a href="https://github.com/Fody/Fody">github.com/Fody/Fody</a></li>
@@ -156,6 +156,9 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
             <li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
             <li>Suggests contracts where they are not declared but can be deduced (implicit contracts):
 <code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
+            <li>Code is not needed to be ran at all</li>
+            <li>Reports contract violations that are <b>possible</b> according to structure of the code</li>
+            <li>Because of this, it also produces false-positives (as opposite to runtime checker)</li>
         </ul>
     </section>
     <section data-title="Contract rewriter">
@@ -197,11 +200,6 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
     </section>
     <section data-title="Runtime internals">
         <ul>
-            <li>Conditional compilation symbols are defined:
-                <code>#define DEBUG
-#define CONTRACTS_FULL</code></li>
-            <li>ContractsRuntime class is injected into assembly</li>
-            <li>Calls to Contract.* are replaced by calls to ContractsRuntime.*</li>
             <li>ContractsRuntime methods do actual check and react on failure<ul>
                 <li>call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent<sup>1</sup><sup>2</sup></li>
                 <li>which calls registered handlers and native runtime-specific method (e.g. displaying error window)<sup>3</sup><sup>4</sup></li>
@@ -214,15 +212,6 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
             <li><a id="eepolicy" href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556">dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure</a></li>
             <li><a id="eventreporter" href="https://github.com/dotnet/coreclr/blob/master/src/vm/eventreporter.cpp#L155">dotnet/coreclr/.../vm/eventreporter/ERT_CodeContractFailed</a></li>
         </ol>
-    </section>
-    <section data-title="__ContractsRuntime">
-        <code>class ContractException : Exception
-{
-    public ContractFailureKind Kind { get; }
-    public string Failure { get; }
-    public string UserMessage { get; }
-    public string Condition { get; }
-}</code>
     </section>
 </body>
 
