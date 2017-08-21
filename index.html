@@ -163,6 +163,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
     </section>
     <section data-title="Contract rewriter">
         <ul>
+            <li>Is required for runtime checking</li>
             <li>Defines conditional compilation symbols:
                 <code>#define DEBUG
 #define CONTRACTS_FULL</code></li>
@@ -170,15 +171,15 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
             <li>Replaces calls to Contract.* by calls to ContractsRuntime.*, passing both boolean expression and its code as a string</li>
             <li>Transforms contracts validated at method exit into more complex generated code:
                 <ul>
-                    <li>Ensures</li>
-                    <li>EnsuresOnThrow</li>
+                    <li>Ensures, EnsuresOnThrow</li>
                     <li>Invariant</li>
                     <li>Result</li>
-                    <li>ValueAtReturn</li>
-                    <li>ContractClassFor</li>
-                    <li>ContractAbbreviator</li>
+<!--                    <li>ValueAtReturn</li>-->
+<!--                    <li>ContractClassFor</li>-->
+<!--                    <li>ContractAbbreviator</li>-->
                 </ul>
             </li>
+            <li>Inlines ValueAtReturn and code marked with ContractClassFor or ContractAbbreviator</li>
         </ul>
     </section>
     <section data-title="Control flow transforms">
