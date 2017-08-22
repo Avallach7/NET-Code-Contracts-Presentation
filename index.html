@@ -38,11 +38,16 @@
             });
         });
     </script>
+    <style>
+        section:not(:empty)::after {
+            content: counter(slide) "/12"; /*TODO!!!*/
+        }
+    </style>
 </head>
 
 <body>
     <!-- TODO: https://codepen.io/MadeByMike/pen/ZOrEmr -->
-    <section data-title=".NET Code Contracts"></section>
+    <section data-title=".NET Code Contracts" data-footer="Adam.Golebiowski @ NewVoiceMedia.com"></section>
     <section data-title="Agenda" class="agenda"></section>
     <section data-title="History">
         <ul>

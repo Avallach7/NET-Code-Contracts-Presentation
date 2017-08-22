@@ -49,7 +49,7 @@ section[data-title]:before {
 
 section[data-title]:empty:before {
     position: relative;
-    top: calc(50% - 0.5em);
+    top: calc(50% - 1em);
 }
 
 section code {
