@@ -7,7 +7,10 @@ document.app.peerjs.apiKey = "lwjd5qra8257b9";
 function isScrollingBack(event) {
     var backScrollingKeys = ["ArrowUp", "ArrowLeft", "PageUp"];
     return (event instanceof WheelEvent && event.deltaY < 0) ||
-        (event instanceof KeyboardEvent && backScrollingKeys.indexOf(event.key) >= 0);
+        (event instanceof KeyboardEvent && backScrollingKeys.indexOf(event.key) >= 0) ||
+        (event instanceof TouchEvent &&
+            (document.app.touchStart.y - event.changedTouches[0].clientY > 0 ||
+                document.app.touchStart.x - event.changedTouches[0].clientX < 0));
 }
 
 function setSlide(id) {
@@ -68,5 +71,12 @@ window.addEventListener("load", function () {
     document.body.addEventListener("click", changeSlide);
     document.body.addEventListener("wheel", changeSlide);
     document.body.addEventListener("keydown", changeSlide);
+    document.body.addEventListener("touchstart", function (event) {
+        document.app.touchStart = {
+            x: event.touches[0].clientX,
+            y: event.touches[0].clientY
+        }
+    });
+    document.body.addEventListener("touchend", changeSlide);
     setupPeerJs();
 });
