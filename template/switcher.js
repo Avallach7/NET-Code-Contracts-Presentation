@@ -2,7 +2,7 @@ document.app = {};
 document.app.onswitch = function (id) {};
 document.app.peerjs = {};
 document.app.peerjs.serverId = "avallach_ovh_contracts_server";
-document.app.peerjs.apiKey = "lwjd5qra8257b9";
+document.app.peerjs.apiKey = "bw06fw5af8qwipb9";
 
 function isScrollingBack(event) {
     var backScrollingKeys = ["ArrowUp", "ArrowLeft", "PageUp"];
