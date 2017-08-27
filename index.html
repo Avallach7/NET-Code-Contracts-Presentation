@@ -15,11 +15,11 @@
             [].forEach.call(document.getElementsByClassName("agenda"), function(agenda) {
                 function getTitle(slideIndex) {
                     var slide = slides[slideIndex];
-                    var title = (slideIndex+1) + ". ";
-                    if(slide.dataset.title != undefined)
+                    var title = (slideIndex + 1) + ". ";
+                    if (slide.dataset.title != undefined)
                         title += slide.dataset.title;
                     else {
-                        title += getTitle(slideIndex-1);
+                        title += getTitle(slideIndex - 1);
                         if (!title.endsWith(" cont."))
                             title += " cont.";
                     }
@@ -28,8 +28,8 @@
                 var list = document.createElement("ol");
                 agenda.appendChild(list);
                 [].forEach.call(slides, function(slide, index) {
-                    if(slide.classList.contains("agenda") ||
-                       slide.childElementCount == 0)
+                    if (slide.classList.contains("agenda") ||
+                        slide.childElementCount == 0)
                         return;
                     var entry = document.createElement("li");
                     entry.textContent = getTitle(index);
@@ -37,17 +37,22 @@
                 });
             });
         });
+
     </script>
     <style>
-        section:not(:empty)::after {
-            content: counter(slide) "/12"; /*TODO!!!*/
+        section:not(:empty):not(:first-of-type)::after {
+            content: counter(slide) "/12";
+            /*TODO!!!*/
         }
+
     </style>
 </head>
 
 <body>
     <!-- TODO: https://codepen.io/MadeByMike/pen/ZOrEmr -->
-    <section data-title=".NET Code Contracts" data-footer="Adam.Golebiowski @ NewVoiceMedia.com"></section>
+    <section data-title=".NET Code Contracts" data-footer="Adam.Golebiowski @ NewVoiceMedia.com" class="title">
+        <!--        <iframe src="https://avallach.ovh/artworks/plots.html" class="background"></iframe>-->
+    </section>
     <section data-title="Agenda" class="agenda"></section>
     <section data-title="History">
         <ul>
@@ -76,7 +81,7 @@
         </ul>
         <ol class="footnotes">
             <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs</a></li>
-            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>   
+            <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>
             <li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
             <li><a href="https://github.com/Microsoft/CodeContracts/issues/409">github.com/Microsoft/CodeContracts/issues/409</a></li>
             <li><a href="https://github.com/dotnet/roslyn">github.com/dotnet/roslyn</a></li>
@@ -114,6 +119,7 @@
                 font-size: 0.4em;
                 display: inline-block;
             }
+
         </style>
         <code>// The .NET Foundation licenses this file to you under the MIT license.
 namespace <strong>System.Diagnostics.Contracts</strong>
@@ -146,7 +152,7 @@ namespace <strong>System.Diagnostics.Contracts</strong>
                 <code>[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
 void Ensures(bool condition, string userMessage) {...}</code></li>
             <li>Helper methods should only be used as their inline parameters:
-            <code>// returns, so cannot be [Conditional]
+                <code>// returns, so cannot be [Conditional]
 <strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
 Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // both will be either rewritten or omitted</code></li>
             <li>"Hacking" Contract methods to run <strong>without rewriter</strong> results in unspecified behaviour:
@@ -160,7 +166,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
         <ul>
             <li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
             <li>Suggests contracts where they are not declared but can be deduced (implicit contracts):
-<code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
+                <code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
             <li>Code is not needed to be ran at all</li>
             <li>Reports contract violations that are <b>possible</b> according to structure of the code</li>
             <li>Because of this, it also produces false-positives (as opposite to runtime checker)</li>
@@ -179,9 +185,9 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
                     <li>Ensures, EnsuresOnThrow</li>
                     <li>Invariant</li>
                     <li>Result</li>
-<!--                    <li>ValueAtReturn</li>-->
-<!--                    <li>ContractClassFor</li>-->
-<!--                    <li>ContractAbbreviator</li>-->
+                    <!--                    <li>ValueAtReturn</li>-->
+                    <!--                    <li>ContractClassFor</li>-->
+                    <!--                    <li>ContractAbbreviator</li>-->
                 </ul>
             </li>
             <li>Inlines ValueAtReturn and code marked with ContractClassFor or ContractAbbreviator</li>
@@ -206,11 +212,13 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
     </section>
     <section data-title="Runtime internals">
         <ul>
-            <li>ContractsRuntime methods do actual check and react on failure<ul>
-                <li>call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent<sup>1</sup><sup>2</sup></li>
-                <li>which calls registered handlers and native runtime-specific method (e.g. displaying error window)<sup>3</sup><sup>4</sup></li>
-                <li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException</li>
-            </ul></li>
+            <li>ContractsRuntime methods do actual check and react on failure
+                <ul>
+                    <li>call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent<sup>1</sup><sup>2</sup></li>
+                    <li>which calls registered handlers and native runtime-specific method (e.g. displaying error window)<sup>3</sup><sup>4</sup></li>
+                    <li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException</li>
+                </ul>
+            </li>
         </ul>
         <ol class="footnotes">
             <li><a id="raisecontractfailedevent" href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs#L852">dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts/RaiseContractFailedEvent</a></li>

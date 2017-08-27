@@ -19,7 +19,6 @@ body {
 section {
     --horizontal-padding: 2.5em;
     --vertical-padding: 2em;
-    
     overflow: hidden;
     counter-increment: slide;
     box-sizing: border-box;
@@ -32,7 +31,7 @@ section {
     position: relative;
 }
 
-section:not(:empty)::after {
+section:not(:empty):not(:first-of-type)::after {
     position: absolute;
     right: 5vw;
     bottom: 5vh;
@@ -47,7 +46,8 @@ section[data-title]:before {
     text-align: center;
 }
 
-section[data-title]:empty:before {
+section[data-title]:empty:before,
+section[data-title].title:before {
     position: relative;
     top: calc(50% - 1em);
 }
@@ -97,16 +97,15 @@ section .footnotes {
     bottom: var(--vertical-padding);
 }
 
-section .footnotes > *:before {
-	content: "[" counter(footnote-counter) "]  ";
-	counter-increment: footnote-counter;
+section .footnotes>*:before {
+    content: "[" counter(footnote-counter) "]  ";
+    counter-increment: footnote-counter;
 }
 
 @media print {
     body {
         background: black !important;
     }
-    
     section {
         background: var(--background-color) url('template/bg.svg');
         background-size: cover;
@@ -114,8 +113,7 @@ section .footnotes > *:before {
         page-break-inside: avoid;
         page-break-before: always;
     }
-
-    @page{
+    @page {
         margin: 0;
         size: landscape;
         size: 12in 19in landscape;
@@ -126,11 +124,14 @@ section.agenda ol {
     list-style-type: none;
 }
 
+
 /*misc*/
+
 body {
     cursor: pointer !important;
     overflow: hidden;
 }
+
 
 /*
 body {
