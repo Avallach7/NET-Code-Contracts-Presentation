@@ -9,7 +9,7 @@
     <link href="template/layout.css" rel="stylesheet">
     <link href="template/theme.css" rel="stylesheet">
     <script src="template/switcher.js"></script>
-    <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+    <script src="template/peer.min.js"></script>
     <script>
         window.addEventListener("load", function() {
             var slides = document.getElementsByTagName("section");
@@ -38,12 +38,14 @@
                 });
             });
         });
+
     </script>
     <style>
         section:not(:empty):not(:first-of-type)::after {
             content: counter(slide) "/12";
             /*TODO!!!*/
         }
+
     </style>
 </head>
 
@@ -56,6 +58,7 @@
                 left: 3em;
                 top: 15em;
             }
+
         </style>
         <a class="url" href="https://avallach.ovh/contracts">avallach.ovh/contracts</a>
         <!--        <iframe src="https://avallach.ovh/artworks/plots.html" class="background"></iframe>-->
@@ -126,6 +129,7 @@
                 font-size: 0.4em;
                 display: inline-block;
             }
+
         </style>
         <code>// The .NET Foundation licenses this file to you under the MIT license.
 namespace <strong>System.Diagnostics.Contracts</strong>
