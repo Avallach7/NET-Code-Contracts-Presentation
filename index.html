@@ -9,6 +9,7 @@
     <link href="template/layout.css" rel="stylesheet">
     <link href="template/theme.css" rel="stylesheet">
     <script src="template/switcher.js"></script>
+    <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
     <script>
         window.addEventListener("load", function() {
             var slides = document.getElementsByTagName("section");
@@ -37,14 +38,12 @@
                 });
             });
         });
-
     </script>
     <style>
         section:not(:empty):not(:first-of-type)::after {
             content: counter(slide) "/12";
             /*TODO!!!*/
         }
-
     </style>
 </head>
 
@@ -57,7 +56,6 @@
                 left: 3em;
                 top: 15em;
             }
-
         </style>
         <a class="url" href="https://avallach.ovh/contracts">avallach.ovh/contracts</a>
         <!--        <iframe src="https://avallach.ovh/artworks/plots.html" class="background"></iframe>-->
@@ -83,7 +81,7 @@
     <section data-title=".NET Core support">
         <ul>
             <li>source code repository contains implementation of Contracts class<sup>1</sup> and failure handling code for runtime checking<sup>2</sup></li>
-            <li>this code is inaccessible in public builds, and instead stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup></li>
+            <li>this code can only be used internally by framework, and for applications stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup> instead</li>
             <li>such built-in runtime support is not required, but community still has to develop new toolset<sup>4</sup></li>
             <li>Microsoft.CodeAnalysis (aka Roslyn)<sup>5</sup> or Fody<sup>6</sup> may be very helpful</li>
             <li>later during this presentation, I'll show proof-of-concept reimplementation for Core using Roslyn</li>
@@ -128,7 +126,6 @@
                 font-size: 0.4em;
                 display: inline-block;
             }
-
         </style>
         <code>// The .NET Foundation licenses this file to you under the MIT license.
 namespace <strong>System.Diagnostics.Contracts</strong>
