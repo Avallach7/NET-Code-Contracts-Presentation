@@ -17,7 +17,7 @@ document.app.setSlide = function(id) {
 }
 
 document.app.onSlideChange = function(event) {
-    console.log(`document.app.onSlideChange(${typeof(event)})`);
+    console.log(`document.app.onSlideChange(${event.type})`);
     var newSlide = document.app.activeSlideId + (document.app.isScrollingBack(event) ? -1 : 1);
     if (newSlide >= document.app.slides.length)
         newSlide = 0;
