@@ -1,9 +1,21 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700|Roboto:100,300,500,900');
-@import url('https://fonts.googleapis.com/css?family=Overpass+Mono:300,700');
-@import url('https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css');
+@font-face {
+	font-family: 'Computer Modern Concrete';
+	src: url('ComputerModern-Concrete.woff') format('woff');
+}
+@font-face {
+	font-family: 'Roboto Slab';
+	src: url('RobotoSlab-Bold.woff') format('woff');
+    font-weight: bold;
+}
+@font-face {
+	font-family: 'Overpass Mono';
+	src: url('OverpassMono-Light.woff') format('woff');
+    font-weight: light;
+}
+
 body {
-    --background-color: black;
-    --content-color: white;
+    --background-color: white;
+    --content-color: black;
     --text-scale: 2.0;
     background: var(--background-color);
 }
@@ -14,47 +26,38 @@ a {
 }
 
 section {
-    background: var(--background-color) url('bg.svg');
-    /*    background: var(--background-color) url('cc-logo-2.png');*/
-    background-size: cover;
-}
-
-section {
+    background: var(--background-color);
     color: var(--content-color);
-    font-family: 'Roboto', sans-serif;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
-    font-weight: 300;
+    font-family: 'Computer Modern Concrete', serif;
     line-height: 1.8em;
 }
 
 section::after {
-    /*    color: rgba(255, 255, 255, 0.5);*/
     font-size: 0.5em;
     font-weight: 100;
+    opacity: 0.5;
 }
 
 section code {
-    background: var(--background-color);
-    /*    color: rgba(255, 255, 255, 0.8);*/
-    padding: 1em 2em;
-    line-height: 1.8em;
-    font-family: 'Overpass Mono', 'Roboto Mono', 'FiraCode', monospace;
+    font-family: 'Overpass Mono', monospace;
     font-weight: 100;
-    font-variant-ligatures: contextual;
     font-size: 0.5em;
+    background: var(--background-color);
+    border: 1px dashed var(--content-color);
+    line-height: 1.8em;
 }
 
 section code strong {
-    /*    color: white;*/
     font-weight: 800;
 }
 
 section[data-title]:before,
 section h1 {
-    font-weight: 100;
     font-family: 'Roboto Slab', serif;
     font-size: 2.3em;
+    font-weight: 800;
+    background: var(--content-color);
+    color: var(--background-color);
 }
 
 section[data-title]:empty:before,
@@ -67,61 +70,15 @@ section.title {
     background: var(--background-color) url('cc-logo.svg');
 }
 
-section {
-    font-family: 'Computer Modern Concrete';
-    /*    font-family: 'Computer Modern Serif';*/
-}
-
-section code {
-    border: 1px dashed black;
-    background: rgba(0, 0, 0, 0.05);
-}
-
-body {
-    --background-color: white;
-    --content-color: black;
-}
-
-section[data-title]:before,
-section h1 {
-    /*    font-family: 'Computer Modern Concrete';*/
-    font-weight: 400;
-    /*    font-family: 'Computer Modern Serif';*/
-}
-
-section[data-title]:before,
-section h1 {
-    background: var(--content-color);
-    color: var(--background-color);
-    font-weight: 800;
-    display: inline-block;
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    margin-bottom: 0.5em;
-    text-align: left;
-}
-
 section[data-footer]:after {
-    content: attr(data-footer);
-    color: var(--content-color);
     font-size: 1em;
-    position: absolute;
-    bottom: 5vh;
-    display: block;
+    opacity: 1;
 }
 
-section .background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: -1;
-    filter: invert(100%);
-    opacity: 0.3;
-    border: none;
+section .footnote-link,
+section sup,
+section .footnotes {
+    font-size: 0.5em;
+    opacity: 0.5;
 }
 
-section>*:first-child {
-    padding-top: 0;
-    margin-top: 0;
-}
