@@ -73,8 +73,8 @@ document.app.peerjs.setup = function() {
                 console.log(`document.app.peerjs.peerConnection.ondata(${data})`);
                 document.app.setSlide(data);
             });
-            peerConnection.on('error', function () {
-                console.log(`document.app.peerjs.peerConnection.onerror()`);
+            peerConnection.on('error', function (err) {
+                console.log(`document.app.peerjs.peerConnection.onerror(${err})`);
             });
             peerConnection.on('close', function () {
                 console.log(`document.app.peerjs.peerConnection.onclose()`);
@@ -86,8 +86,8 @@ document.app.peerjs.setup = function() {
         document.app.peerjs.server.on('disconnected', function () {
             console.log(`document.app.peerjs.server.ondisconnected()`);
         });
-        document.app.peerjs.server.on('error', function () {
-            console.log(`document.app.peerjs.server.onerror()`);
+        document.app.peerjs.server.on('error', function (err) {
+            console.log(`document.app.peerjs.server.onerror(${err})`);
         });
         document.app.peerjs.server.on('open', function () {
             console.log(`document.app.peerjs.server.onopen()`);
@@ -115,8 +115,8 @@ document.app.peerjs.setup = function() {
                 console.log(`document.app.peerjs.serverConnection.ondata(${data})`);
                 document.app.setSlide(data);
             });
-            document.app.peerjs.serverConnection.on('error', function () {
-                console.log(`document.app.peerjs.serverConnection.onerror()`);
+            document.app.peerjs.serverConnection.on('error', function (err) {
+                console.log(`document.app.peerjs.serverConnection.onerror(${err})`);
             });
             document.app.peerjs.serverConnection.on('open', function () {
                 console.log(`document.app.peerjs.serverConnection.onopen()`);
@@ -131,8 +131,8 @@ document.app.peerjs.setup = function() {
         document.app.peerjs.peer.on('disconnected', function () {
             console.log(`document.app.peerjs.peer.ondisconnected()`);
         });
-        document.app.peerjs.peer.on('error', function () {
-            console.log(`document.app.peerjs.peer.onerror()`);
+        document.app.peerjs.peer.on('error', function (err) {
+            console.log(`document.app.peerjs.peer.onerror(${err})`);
         });
         document.app.peerjs.peer.on('connection', function () {
             console.log(`document.app.peerjs.peer.onconnection()`);
