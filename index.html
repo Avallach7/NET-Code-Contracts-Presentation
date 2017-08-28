@@ -58,10 +58,8 @@
                 left: 3em;
                 top: 15em;
             }
-
         </style>
         <a class="url" href="https://avallach.ovh/contracts">avallach.ovh/contracts</a>
-        <!--        <iframe src="https://avallach.ovh/artworks/plots.html" class="background"></iframe>-->
     </section>
     <section data-title="Agenda" class="agenda"></section>
     <section data-title="History">
@@ -121,17 +119,12 @@
     </section>
     <section data-title="Contract interface in BCL">
         <style>
-            section[data-title="Contract interface in BCL"] {
-                text-align: center;
-            }
-            
             section[data-title="Contract interface in BCL"] code {
-                font-size: 0.4em;
+                font-size: 0.45em;
                 display: inline-block;
             }
-
         </style>
-        <code>// The .NET Foundation licenses this file to you under the MIT license.
+        <center><code>// The .NET Foundation licenses this file to you under the MIT license.
 namespace <strong>System.Diagnostics.Contracts</strong>
 {
     public static class <strong>Contract</strong>
@@ -153,7 +146,7 @@ namespace <strong>System.Diagnostics.Contracts</strong>
         T <strong>ValueAtReturn&lt;T&gt;</strong>(out T value) { value = default(T); return value; }
     }
     public class <strong>Pure</strong>Attribute : Attribute { }
-}</code>
+}</code></center>
     </section>
     <section data-title="Contract method stubs">
         <ul>

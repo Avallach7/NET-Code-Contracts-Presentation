@@ -58,6 +58,7 @@ section h1 {
     font-weight: 800;
     background: var(--content-color);
     color: var(--background-color);
+    padding: 0.2em 0.2em 0.3em 0.2em;
 }
 
 section[data-title]:empty:before,
