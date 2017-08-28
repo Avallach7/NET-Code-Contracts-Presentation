@@ -25,6 +25,10 @@ a {
     text-decoration: none;
 }
 
+ul {
+    list-style-type: square;
+}
+
 section {
     background: var(--background-color);
     color: var(--content-color);
@@ -69,6 +73,10 @@ section[data-title].title:before {
 section:empty,
 section.title {
     background: var(--background-color) url('cc-logo.svg');
+}
+
+section {
+    background: var(--background-color) url('cc-logo-2.svg');
 }
 
 section[data-footer]:after {

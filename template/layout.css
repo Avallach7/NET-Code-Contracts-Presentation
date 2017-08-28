@@ -128,7 +128,7 @@ section.agenda ol {
 section[data-footer]:after {
     content: attr(data-footer);
     position: absolute;
-    bottom: 3em;
+    bottom: 1em;
     display: block;
 }
 
