@@ -142,19 +142,10 @@ section .background {
     border: none;
 }
 
-/*misc*/
-
 body {
     cursor: pointer !important;
     overflow: hidden;
 }
-
-
-/*
-body {
-    user-select: none;
-}
-*/
 
 ::selection {
     color: inherit;
