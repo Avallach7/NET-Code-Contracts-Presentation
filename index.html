@@ -115,7 +115,7 @@
 					Single contract block always specifies single method
 				</td>
 				<td>
-					One or more methods checked by one or more UT
+					One or more methods checked by one or more UT (no direct mapping)
 				</td>
 			</tr>
 			<tr>
@@ -166,7 +166,7 @@
 	<section data-title=".NET Core support">
 		<ul>
 			<li>source code repository contains implementation of Contracts class<sup>1</sup> and failure handling code for runtime checking<sup>2</sup></li>
-			<li>this code can only be used internally by framework, and for applications stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup>				instead</li>
+			<li>this code can only be used internally by framework, and for applications stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup> instead</li>
 			<li>such built-in runtime support is not required, but community still has to develop new toolset<sup>4</sup></li>
 			<li>Microsoft.CodeAnalysis (aka Roslyn)<sup>5</sup> or Fody<sup>6</sup> may be very helpful</li>
 			<li>later during this presentation, I'll show proof-of-concept reimplementation for Core using Roslyn</li>
