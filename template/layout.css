@@ -49,7 +49,7 @@ section h1 {
 }
 
 section>*:first-child {
-    padding-top: 0;
+/*    padding-top: 0;*/
     margin-top: 0;
 }
 
@@ -64,6 +64,7 @@ section code {
     display: block;
     text-align: left;
     padding: 1em 2em;
+    tab-size: 4;
 }
 
 section footer {

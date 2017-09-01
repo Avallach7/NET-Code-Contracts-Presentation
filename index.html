@@ -8,6 +8,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="template/layout.css" rel="stylesheet">
 	<link href="template/theme.css" rel="stylesheet">
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            var codes = document.querySelectorAll("code[class]");
+            for (i = 0; i < codes.length; i++) {
+                hljs.highlightBlock(codes[i]);
+                codes[i].classList.remove("hljs");
+            }
+        });
+    </script>
 	<script src="template/switcher.js"></script>
 	<script src="template/peer.min.js"></script>
 	<script>
@@ -61,6 +73,88 @@
 	</section>
 	<section data-title="Agenda" class="agenda"></section>
     <section data-title="Example code">
+        <code class="csharp">public interface IFibonacci
+{
+	bool IsFibonacci(int n);
+	int GetNthFibonacci(int n);
+	int GetNextFibonacci(int n);
+}
+
+
+public class Fibonacci : IFibonacci
+{
+	private static bool IsPerfectSquare(int m) =&gt; (int) Sqrt(m)*(int) Sqrt(m) == m;
+
+	public bool IsFibonacci(int n)
+	{
+		return IsPerfectSquare(5 * n * n + 4) || IsPerfectSquare(5 * n * n - 4);
+	}
+
+	public int GetNthFibonacci(int n)
+	{
+		return (n &lt; 2) ? n : GetNthFibonacci(n - 1) + GetNthFibonacci(n - 2);
+	}
+
+	public int GetNextFibonacci(int n)
+	{
+		return Enumerable.Range(0, n+2).Select(GetNthFibonacci).First(m =&gt; m &gt; n);
+	}
+}
+
+[ContractClassFor(typeof(IFibonacci))]
+abstract class FibonacciContract : IFibonacci
+{
+	public bool IsFibonacci(int n)
+	{
+		Ensures(n &gt;= 0 || Result&lt;bool&gt;() == false);
+		return default(bool);
+	}
+
+	public int GetNthFibonacci(int n)
+	{
+		Requires(n &gt;= 0);
+		Ensures(((IFibonacci)this).IsFibonacci(Result&lt;int&gt;()));
+		Ensures(n &gt; 1 || Result&lt;int&gt;() == n);
+		Ensures(n &lt; 2 || Enumerable.Range(0, Result&lt;int&gt;() + 1).Count(m =&gt; ((IFibonacci)this).IsFibonacci(m)) == n);
+		return default(int);
+	}
+
+	public int GetNextFibonacci(int n)
+	{
+		Requires(((IFibonacci)this).IsFibonacci(n));
+		Ensures(((IFibonacci)this).IsFibonacci(Result&lt;int&gt;()));
+		Ensures(ForAll(n + 1, Result&lt;int&gt;(), m =&gt; !((IFibonacci)this).IsFibonacci(m)));
+		return default(int);
+	}
+}
+
+public class FibonacciTest : Fibonacci
+{
+	[Theory] [InlineData(0)] [InlineData(21)] [InlineData(1597)]
+	public void FibonacciNumbersAreRecognized(int number)
+	{
+		Assert.True(IsFibonacci(number));
+	}
+
+	[Theory] [InlineData(4)] [InlineData(22)] [InlineData(1598)]
+	public void NonFibonacciNumbersAreRecognized(int number)
+	{
+		Assert.False(IsFibonacci(number));
+	}
+
+	[Theory] [InlineData(0, 0)] [InlineData(8, 21)] [InlineData(17, 1597)]
+	public void NthFibonacciNumberIsCalculated(int n, int expectation)
+	{
+		Assert.Equal(expectation, GetNthFibonacci(n));
+	}
+
+	[Theory] [InlineData(0, 1)] [InlineData(13, 21)] [InlineData(987, 1597)]
+	public void NextFibonacciNumberIsCalculated(int current, int expectedNext)
+	{
+		Assert.Equal(expectedNext, GetNextFibonacci(current));
+	}
+}</code>
+
         <code><div><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span> <span style="color: #267f99;">IFibonacci</span></div><div>{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsFibonacci</span>(<span style="color: #0000ff;">int</span> n);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #0000ff;">int</span> n);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNextFibonacci</span>(<span style="color: #0000ff;">int</span> n);</div><div>}</div></code>
 
         <code><div><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> <span style="color: #267f99;">Fibonacci</span> : <span style="color: #267f99;">IFibonacci</span></div><div>{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsPerfectSquare</span>(<span style="color: #0000ff;">int</span> m) =&gt; (<span style="color: #0000ff;">int</span>) <span style="color: #795e26;">Sqrt</span>(<span style="color: #001080;">m</span>)*(<span style="color: #0000ff;">int</span>) <span style="color: #795e26;">Sqrt</span>(<span style="color: #001080;">m</span>) == <span style="color: #001080;">m</span>;</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #795e26;">IsPerfectSquare</span>(<span style="color: #09885a;">5</span> * <span style="color: #001080;">n</span> * <span style="color: #001080;">n</span> + <span style="color: #09885a;">4</span>) || <span style="color: #795e26;">IsPerfectSquare</span>(<span style="color: #09885a;">5</span> * <span style="color: #001080;">n</span> * <span style="color: #001080;">n</span> - <span style="color: #09885a;">4</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> (<span style="color: #001080;">n</span> &lt; <span style="color: #09885a;">2</span>) ? <span style="color: #001080;">n</span> : <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #001080;">n</span> - <span style="color: #09885a;">1</span>) + <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #001080;">n</span> - <span style="color: #09885a;">2</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNextFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #001080;">Enumerable</span>.<span style="color: #795e26;">Range</span>(<span style="color: #09885a;">0</span>, <span style="color: #001080;">n</span>+<span style="color: #09885a;">2</span>).<span style="color: #795e26;">Select</span>(<span style="color: #001080;">GetNthFibonacci</span>).<span style="color: #795e26;">First</span>(m =&gt; <span style="color: #001080;">m</span> &gt; <span style="color: #001080;">n</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><div>}</div></code>
