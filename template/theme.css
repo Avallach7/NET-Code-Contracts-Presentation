@@ -1,6 +1,12 @@
 @font-face {
-	font-family: 'Computer Modern Concrete';
-	src: url('ComputerModern-Concrete.woff') format('woff');
+  font-family: 'Open Sans';
+  font-weight: 300;
+  src: url(OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-weight: 800;
+  src: url(OpenSans-ExtraBold.woff) format('woff');
 }
 @font-face {
 	font-family: 'Roboto Slab';
@@ -16,7 +22,7 @@
 body {
     --background-color: white;
     --content-color: black;
-    --text-scale: 2.0;
+    --text-scale: 1.65;
     background: var(--background-color);
 }
 
@@ -29,11 +35,17 @@ ul {
     list-style-type: square;
 }
 
+li, td {
+    padding-bottom: 1em;
+    line-height: 1.7em;
+}
+
 section {
     background: var(--background-color);
     color: var(--content-color);
-    font-family: 'Computer Modern Concrete', serif;
-    line-height: 1.8em;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 2.3em;
 }
 
 section::after {
@@ -90,4 +102,3 @@ section .footnotes {
     font-size: 0.5em;
     opacity: 0.5;
 }
-

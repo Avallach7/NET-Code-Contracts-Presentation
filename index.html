@@ -9,8 +9,8 @@
 	<link href="template/layout.css" rel="stylesheet">
 	<link href="template/theme.css" rel="stylesheet">
     <link rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script>
         window.addEventListener("load", function () {
             var codes = document.querySelectorAll("code[class]");
@@ -66,7 +66,7 @@
 			section.title>a.url {
 				position: absolute;
 				left: 3em;
-				top: 15em;
+				top: 18em;
 			}
 		</style>
 		<a class="url" href="https://avallach.ovh/contracts">avallach.ovh/contracts</a>
@@ -215,10 +215,10 @@ public class FibonacciTest : Fibonacci
 			</tr>
 			<tr>
 				<td>
-					Single contract block always specifies single method
+                    1:1 mapping with implementing methods
 				</td>
 				<td>
-					One or more methods checked by one or more UT (no direct mapping)
+                    No direct mapping with implementing methods
 				</td>
 			</tr>
 			<tr>
@@ -275,19 +275,17 @@ public class FibonacciTest : Fibonacci
 	</section>
 	<section data-title="Contract packages">
 		<ul>
-			<li>System.Diagnostics.Contracts
+			<li><strong>System.Diagnostics.Contracts</strong>
 				<ul>
 					<li>.NET Core compatible</li>
 					<li>All methods are stubbed (does nothing)</li>
 					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
 				</ul>
 			</li>
-			<li>DotNet.Contracts
+			<li><strong>DotNet.Contracts</strong>
 				<ul>
 					<li>.NET Core incompatible</li>
-					<li>Static checker</li>
-					<li>Runtime checker</li>
-					<li>Documentation generator</li>
+					<li>Documentation generator, static and runtime checker</li>
 					<li>VS2015 extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
 					<li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
 				</ul>
@@ -297,12 +295,12 @@ public class FibonacciTest : Fibonacci
 	<section data-title="Contract interface in BCL">
 		<style>
 			section[data-title="Contract interface in BCL"] code {
-				font-size: 0.45em;
+				font-size: 0.65em;
 				display: inline-block;
 			}
 		</style>
 		<center>
-			<code>// The .NET Foundation licenses this file to you under the MIT license.
+			<code class="csharp">// The .NET Foundation licenses this file to you under the MIT license.
 namespace <strong>System.Diagnostics.Contracts</strong>
 {
     public static class <strong>Contract</strong>
@@ -331,14 +329,14 @@ namespace <strong>System.Diagnostics.Contracts</strong>
 		<ul>
 			<li>Designed to do nothing when runtime checking is off (no performance overhead!)</li>
 			<li>Assertion methods are compiled conditionally:
-				<code>[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
+				<code class="csharp">[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
 void Ensures(bool condition, string userMessage) {...}</code></li>
 			<li>Helper methods should only be used as their inline parameters:
-				<code>// returns, so cannot be [Conditional]
+				<code class="csharp">// returns, so cannot be [Conditional]
 <strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
 Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // both will be either rewritten or omitted</code></li>
 			<li>"Hacking" Contract methods to run <strong>without rewriter</strong> results in unspecified behaviour:
-				<code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. throw or always return false)
+				<code class="csharp">bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. throw or always return false)
 <strong>#define DEBUG
 #define CONTRACTS_FULL</strong>
 Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)</code></li>
@@ -348,7 +346,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 		<ul>
 			<li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
 			<li>Suggests contracts where they are not declared but can be deduced (implicit contracts):
-				<code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
+				<code class="csharp">CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
 			<li>Code is not needed to be ran at all</li>
 			<li>Reports contract violations that are <b>possible</b> according to structure of the code</li>
 			<li>Because of this, it also produces false-positives (as opposite to runtime checker)</li>
@@ -358,7 +356,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 		<ul>
 			<li>Is required for runtime checking</li>
 			<li>Defines conditional compilation symbols:
-				<code>#define DEBUG
+				<code class="csharp">#define DEBUG
 #define CONTRACTS_FULL</code></li>
 			<li>Injects ContractsRuntime class into assembly</li>
 			<li>Replaces calls to Contract.* by calls to ContractsRuntime.*, passing both boolean expression and its code as a string</li>
@@ -367,9 +365,6 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 					<li>Ensures, EnsuresOnThrow</li>
 					<li>Invariant</li>
 					<li>Result</li>
-					<!--                    <li>ValueAtReturn</li>-->
-					<!--                    <li>ContractClassFor</li>-->
-					<!--                    <li>ContractAbbreviator</li>-->
 				</ul>
 			</li>
 			<li>Inlines ValueAtReturn and code marked with ContractClassFor or ContractAbbreviator</li>
