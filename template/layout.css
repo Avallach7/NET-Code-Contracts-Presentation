@@ -72,31 +72,27 @@ section footer {
     bottom: 2em;
 }
 
-section .footnote-link,
-section sup {
+section {
+    counter-reset: footnote-link-counter;
+}
+
+section *[data-footnote]:after {
+    content: " [" counter(footnote-link-counter) "]";
+    counter-increment: footnote-link-counter;
     vertical-align: super;
-}
-
-section .footnote-link:before,
-section sup:before {
-    content: " [";
-}
-
-section .footnote-link:after,
-section sup:after {
-    content: "]";
 }
 
 section .footnotes {
     line-height: 1.7em;
-}
-
-section .footnotes {
     counter-reset: footnote-counter;
     list-style-type: none;
     padding: 0;
     position: absolute;
     bottom: var(--vertical-padding);
+}
+
+section .footnotes > * {
+    display: list-item;
 }
 
 section .footnotes>*:before {
@@ -124,7 +120,9 @@ section .footnotes>*:before {
 
 section.agenda ol {
     list-style-type: none;
-    column-width: 22em;
+    column-count: 2;
+    column-fill: auto;
+    height: 24em;
 }
 
 section ol > *, 

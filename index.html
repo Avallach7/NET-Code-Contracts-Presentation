@@ -36,7 +36,23 @@
     <script>
         window.addEventListener("load", function () {
             document.location.search.substr(1).split("&").forEach(function(param) {
-                document.body.classList.add(param);
+                if (param.length > 0)
+                    document.body.classList.add(param);
+            });
+        });
+    </script>
+    <script>
+        window.addEventListener("load", function () {
+            document.app.slides.forEach(function(slide) {
+                var footnotes = document.createElement("footer");
+                footnotes.classList.add("footnotes");
+                Array.prototype.slice.call(slide.querySelectorAll("*[data-footnote]")).forEach(function(hyperlink) {
+                    var footnote = document.createElement("a");
+                    footnote.href = hyperlink.href;
+                    footnote.textContent = hyperlink.dataset.footnote;
+                    footnotes.appendChild(footnote);
+                });
+                slide.appendChild(footnotes);
             });
         });
     </script>
@@ -72,9 +88,9 @@
 		Assert.Equal(expectation, GetNkLteEnbEarfcnAdj(n));
 	}
 	[Theory] [InlineData(0, 1)] [InlineData(13, 21)] [InlineData(987, 1597)]
-	public void CPlanePbrSchUeNtActIsCalculated(int current, int expectedNext)
+	public void CPlnPbrSchUeNtActIsCalculated(int current, int expectedNext)
 	{
-		Assert.Equal(expectedNext, GetCPlanePbrSchUeNtActNext(current));
+		Assert.Equal(expectedNext, GetCPlnPbrSchUeNtActNext(current));
 	}
 }</code></p>
     </section>
@@ -92,7 +108,7 @@ abstract class FibonacciContract : IFibonacci
         <span class="irrelevant">return default(int);</span>
 	}
 
-	public int GetCPlanePbrSchUeNtActNext(int n)
+	public int GetCPlnPbrSchUeNtActNext(int n)
 	{
 		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
 		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
@@ -117,7 +133,7 @@ abstract class FibonacciContract : IFibonacci
         <span class="irrelevant">return default(int);</span>
 	}
 
-	public int GetCPlanePbrSchUeNtActNext(int n)
+	public int GetCPlnPbrSchUeNtActNext(int n)
 	{
 		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
 		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
@@ -231,47 +247,31 @@ abstract class FibonacciContract : IFibonacci
 	</section>
 	<section data-title="History">
 		<ul>
-			<li>Developed at Software Engineering division of Microsoft Research (RiSE)<sup>1</sup></li>
-			<li>Open sourced (MIT License) and released on GitHub<sup>2</sup></li>
-			<li>Added to Base Class Library<sup>3</sup></li>
-			<li>Internally used in implementation of .NET Framework<sup>4</sup> and .NET Core<sup>5</sup></li>
-			<li>RiSE toolset supports only Visual Studio 2015 and full .NET Framework<sup>6</sup></li>
+			<li>Developed at <a href="https://www.microsoft.com/en-us/research/group/research-in-software-engineering-rise/" data-footnote="microsoft.com/.../research-in-software-engineering-rise">Software Engineering division of Microsoft Research (RiSE)</a></li>
+            <li>Open sourced (MIT License) and <a href="https://github.com/Microsoft/CodeContracts" data-footnote="github.com/Microsoft/CodeContracts">released on GitHub</a></li>
+            <li><a href="http://referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs" data-footnote="referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs">Added to Base Class Library</a></li>
+            <li>Internally used in implementation of <a href="http://referencesource.microsoft.com/#mscorlib/system/array.cs,2904" data-footnote="referencesource.microsoft.com/#mscorlib/system/array.cs">.NET Framework</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Array.cs#L52" data-footnote="dotnet/coreclr/.../mscorlib/src/System/Array.cs">.NET Core</a></li>
+            <li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET" data-footnote="marketplace.visualstudio.com/.../CodeContractsforNET">RiSE toolset supports only Visual Studio 2015 and full .NET Framework</a></li>
 		</ul>
-		<ol class="footnotes">
-			<li><a href="https://www.microsoft.com/en-us/research/group/research-in-software-engineering-rise/">microsoft.com/.../research-in-software-engineering-rise</a></li>
-			<li><a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
-			<li><a href="http://referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs">referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs</a></li>
-			<li><a href="http://referencesource.microsoft.com/#mscorlib/system/array.cs,2904">referencesource.microsoft.com/#mscorlib/system/array.cs</a></li>
-			<li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Array.cs#L52">dotnet/coreclr/.../mscorlib/src/System/Array.cs</a></li>
-			<li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">marketplace.visualstudio.com/.../CodeContractsforNET</a></li>
-		</ol>
 	</section>
 	<section data-title=".NET Core support">
 		<ul>
-			<li>source code repository contains implementation of Contracts class<sup>1</sup> and failure handling code for runtime checking<sup>2</sup></li>
-			<li>this code can only be used internally by framework, and for applications stub is exposed trough package System.Diagnostics.Contracts<sup>3</sup> instead</li>
-			<li>such built-in runtime support is not required, but community still has to develop new toolset<sup>4</sup></li>
-			<li>Microsoft.CodeAnalysis (aka Roslyn)<sup>5</sup> or Fody<sup>6</sup> may be very helpful</li>
+            <li>source code repository contains implementation of <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs">Contracts class</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs">failure handling code for runtime checking</a></li>
+            <li>this code can only be used internally by framework, and for applications stub is exposed trough package <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs" data-footnote="github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs">System.Diagnostics.Contracts</a> instead</li>
+            <li>such built-in runtime support is not required, but <a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">community still has to develop new toolset</a></li>
+            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may be very helpful</li>
 		</ul>
-		<ol class="footnotes">
-			<li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs</a></li>
-			<li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs">github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs</a></li>
-			<li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
-			<li><a href="https://github.com/Microsoft/CodeContracts/issues/409">github.com/Microsoft/CodeContracts/issues/409</a></li>
-			<li><a href="https://github.com/dotnet/roslyn">github.com/dotnet/roslyn</a></li>
-			<li><a href="https://github.com/Fody/Fody">github.com/Fody/Fody</a></li>
-		</ol>
 	</section>
 	<section data-title="Contract packages">
 		<ul>
-			<li><strong>System.Diagnostics.Contracts</strong>
+			<li><strong><a href="https://www.nuget.org/packages/System.Diagnostics.Contracts/" data-footnote="nuget.org/packages/System.Diagnostics.Contracts">System.Diagnostics.Contracts</a></strong>
 				<ul>
 					<li>.NET Core compatible</li>
 					<li>All methods are stubbed (does nothing)</li>
 					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
 				</ul>
 			</li>
-			<li><strong>DotNet.Contracts</strong>
+            <li><strong><a href="https://www.nuget.org/packages/DotNet.Contracts/" data-footnote="nuget.org/packages/DotNet.Contracts">DotNet.Contracts</a></strong>
 				<ul>
 					<li>.NET Core incompatible</li>
 					<li>Documentation generator, static and runtime checker</li>
@@ -344,11 +344,6 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 	<section data-title="Contract rewriter">
 		<ul>
 			<li>Is required for runtime checking</li>
-<!--
-			<li>Defines conditional compilation symbols:
-				<code>#define DEBUG
-#define CONTRACTS_FULL</code></li>
--->
 			<li>Injects ContractsRuntime class into assembly</li>
 			<li>Replaces calls to Contract.* by calls to ContractsRuntime.*, passing both boolean expression and its code as a string</li>
 			<li>Transforms contracts validated at method exit into more complex generated code:
@@ -387,18 +382,12 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 		<ul>
 			<li>ContractsRuntime methods do actual check and react on failure
 				<ul>
-					<li>call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent<sup>1</sup><sup>2</sup></li>
-					<li>which calls registered handlers and runtime-specific method (e.g. displaying assertion error window)<sup>3</sup><sup>4</sup></li>
+					<li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs#L295" data-footnote="dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL/RaiseContractFailedEventImplementation">call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent</a></li>
+					<li>which calls registered handlers and <a href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556" data-footnote="dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure">runtime-specific method</a> (e.g. displaying assertion error window)</li>
 					<li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException containing string representation of failed contract</li>
 				</ul>
 			</li>
 		</ul>
-		<ol class="footnotes">
-			<li><a id="raisecontractfailedevent" href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs#L852">dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts/RaiseContractFailedEvent</a></li>
-			<li><a id="raisecontractfailedeventimplementation" href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs#L295">dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL/RaiseContractFailedEventImplementation</a></li>
-			<li><a id="eepolicy" href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556">dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure</a></li>
-			<li><a id="eventreporter" href="https://github.com/dotnet/coreclr/blob/master/src/vm/eventreporter.cpp#L155">dotnet/coreclr/.../vm/eventreporter/ERT_CodeContractFailed</a></li>
-		</ol>
 	</section>
 </body>
 

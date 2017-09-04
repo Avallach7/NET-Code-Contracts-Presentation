@@ -141,7 +141,7 @@ document.app.peerjs.setup = function() {
 }
 
 window.addEventListener("load", function () {
-    document.app.slides = document.getElementsByTagName("section");
+    document.app.slides = Array.prototype.slice.call(document.getElementsByTagName("section"));
     document.app.activeSlideId = 0;
     document.body.addEventListener("click", document.app.onSlideChange);
     document.body.addEventListener("wheel", document.app.onSlideChange);
