@@ -13,6 +13,8 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script>
         window.addEventListener("load", function () {
+            if (document.location.host.startsWith("127.0.0.1"))
+                return;
             var codes = document.querySelectorAll("code[class]");
             for (i = 0; i < codes.length; i++) {
                 hljs.highlightBlock(codes[i]);
@@ -21,36 +23,8 @@
         });
     </script>
 	<script src="template/switcher.js"></script>
+	<script src="template/agenda.js"></script>
 	<script src="template/peer.min.js"></script>
-	<script>
-		window.addEventListener("load", function () {
-			var slides = document.getElementsByTagName("section");
-			[].forEach.call(document.getElementsByClassName("agenda"), function (agenda) {
-				function getTitle(slideIndex) {
-					var slide = slides[slideIndex];
-					var title = (slideIndex + 1) + ". ";
-					if (slide.dataset.title != undefined)
-						title += slide.dataset.title;
-					else {
-						title += getTitle(slideIndex - 1);
-						if (!title.endsWith(" cont."))
-							title += " cont.";
-					}
-					return title;
-				}
-				var list = document.createElement("ol");
-				agenda.appendChild(list);
-				[].forEach.call(slides, function (slide, index) {
-					if (slide.classList.contains("agenda") ||
-						slide.childElementCount == 0)
-						return;
-					var entry = document.createElement("li");
-					entry.textContent = getTitle(index);
-					list.appendChild(entry);
-				});
-			});
-		});
-	</script>
 	<style>
 		section:not(:empty):not(:first-of-type)::after {
 			content: counter(slide) "/12";
@@ -72,96 +46,103 @@
 		<a class="url" href="https://avallach.ovh/contracts">avallach.ovh/contracts</a>
 	</section>
 	<section data-title="Agenda" class="agenda"></section>
-    <section data-title="Example code">
+    <section data-title="Example code - problem">
+        <p>You need to reimplement some interface, but cannot guess from names what it should really do:
         <code class="csharp">public interface IFibonacci
 {
 	bool IsFibonacci(int n);
-	int GetNthFibonacci(int n);
-	int GetNextFibonacci(int n);
-}
-
-
-public class Fibonacci : IFibonacci
+	int GetNkLteEnbEarfcnAdj(int n);       // apparently someone
+	int GetCPlanePbrSchUeNtActNext(int n); // wrote those in Finnish
+}</code>
+            Unit tests operate on example data and may not be enough to design generic implementation:
+            <code class="csharp">public class FibonacciTest : Fibonacci
 {
-	private static bool IsPerfectSquare(int m) =&gt; (int) Sqrt(m)*(int) Sqrt(m) == m;
-
-	public bool IsFibonacci(int n)
+	[Theory] [InlineData(0, 0)] [InlineData(8, 21)] [InlineData(17, 1597)]
+	public void NkLteEnbEarfcnAdjIsCalculated(int n, int expectation)
 	{
-		return IsPerfectSquare(5 * n * n + 4) || IsPerfectSquare(5 * n * n - 4);
+		Assert.Equal(expectation, GetNkLteEnbEarfcnAdj(n));
 	}
-
-	public int GetNthFibonacci(int n)
+	[Theory] [InlineData(0, 1)] [InlineData(13, 21)] [InlineData(987, 1597)]
+	public void CPlanePbrSchUeNtActIsCalculated(int current, int expectedNext)
 	{
-		return (n &lt; 2) ? n : GetNthFibonacci(n - 1) + GetNthFibonacci(n - 2);
+		Assert.Equal(expectedNext, GetCPlanePbrSchUeNtActNext(current));
 	}
-
-	public int GetNextFibonacci(int n)
-	{
-		return Enumerable.Range(0, n+2).Select(GetNthFibonacci).First(m =&gt; m &gt; n);
-	}
-}
-
-[ContractClassFor(typeof(IFibonacci))]
+}</code></p>
+    </section>
+    <section data-title="Example code - contract">
+        <p>Contracts help to express generic intention behind interface:
+            <code class="csharp">[ContractClassFor(typeof(IFibonacci))]
 abstract class FibonacciContract : IFibonacci
 {
-	public bool IsFibonacci(int n)
+	public int GetNkLteEnbEarfcnAdj(int n)
 	{
-		Ensures(n &gt;= 0 || Result&lt;bool&gt;() == false);
-		return default(bool);
+		Requires(n &gt;= 0);
+        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
+		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
+        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);
+        <span class="irrelevant">return default(int);</span>
 	}
 
+	public int GetCPlanePbrSchUeNtActNext(int n)
+	{
+		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
+		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
+		Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
+		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));
+		<span class="irrelevant">return default(int);</span>
+	}
+}
+</code></p>
+    </section>
+    <section data-title="Example code - contract cont.">
+        <p>Contracts help to express generic intention behind interface:
+            <code class="csharp">[ContractClassFor(typeof(IFibonacci))]
+abstract class FibonacciContract : IFibonacci
+{
 	public int GetNthFibonacci(int n)
 	{
 		Requires(n &gt;= 0);
-		Ensures(((IFibonacci)this).IsFibonacci(Result&lt;int&gt;()));
-		Ensures(n &gt; 1 || Result&lt;int&gt;() == n);
-		Ensures(n &lt; 2 || Enumerable.Range(0, Result&lt;int&gt;() + 1).Count(m =&gt; ((IFibonacci)this).IsFibonacci(m)) == n);
-		return default(int);
+        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
+		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
+        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);
+        <span class="irrelevant">return default(int);</span>
+	}
+
+	public int GetCPlanePbrSchUeNtActNext(int n)
+	{
+		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
+		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
+		Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
+		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));
+		<span class="irrelevant">return default(int);</span>
+	}
+}
+</code></p>
+    </section>
+    <section data-title="Example code - contract cont.">
+        <p>Contracts help to express generic intention behind interface:
+            <code class="csharp">[ContractClassFor(typeof(IFibonacci))]
+abstract class FibonacciContract : IFibonacci
+{
+	public int GetNthFibonacci(int n)
+	{
+		Requires(n &gt;= 0);
+        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
+		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
+        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);
+        <span class="irrelevant">return default(int);</span>
 	}
 
 	public int GetNextFibonacci(int n)
 	{
-		Requires(((IFibonacci)this).IsFibonacci(n));
-		Ensures(((IFibonacci)this).IsFibonacci(Result&lt;int&gt;()));
-		Ensures(ForAll(n + 1, Result&lt;int&gt;(), m =&gt; !((IFibonacci)this).IsFibonacci(m)));
-		return default(int);
+		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
+		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
+		Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
+		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));
+		<span class="irrelevant">return default(int);</span>
 	}
 }
-
-public class FibonacciTest : Fibonacci
-{
-	[Theory] [InlineData(0)] [InlineData(21)] [InlineData(1597)]
-	public void FibonacciNumbersAreRecognized(int number)
-	{
-		Assert.True(IsFibonacci(number));
-	}
-
-	[Theory] [InlineData(4)] [InlineData(22)] [InlineData(1598)]
-	public void NonFibonacciNumbersAreRecognized(int number)
-	{
-		Assert.False(IsFibonacci(number));
-	}
-
-	[Theory] [InlineData(0, 0)] [InlineData(8, 21)] [InlineData(17, 1597)]
-	public void NthFibonacciNumberIsCalculated(int n, int expectation)
-	{
-		Assert.Equal(expectation, GetNthFibonacci(n));
-	}
-
-	[Theory] [InlineData(0, 1)] [InlineData(13, 21)] [InlineData(987, 1597)]
-	public void NextFibonacciNumberIsCalculated(int current, int expectedNext)
-	{
-		Assert.Equal(expectedNext, GetNextFibonacci(current));
-	}
-}</code>
-
-        <code><div><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">interface</span> <span style="color: #267f99;">IFibonacci</span></div><div>{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsFibonacci</span>(<span style="color: #0000ff;">int</span> n);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #0000ff;">int</span> n);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNextFibonacci</span>(<span style="color: #0000ff;">int</span> n);</div><div>}</div></code>
-
-        <code><div><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> <span style="color: #267f99;">Fibonacci</span> : <span style="color: #267f99;">IFibonacci</span></div><div>{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">private</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsPerfectSquare</span>(<span style="color: #0000ff;">int</span> m) =&gt; (<span style="color: #0000ff;">int</span>) <span style="color: #795e26;">Sqrt</span>(<span style="color: #001080;">m</span>)*(<span style="color: #0000ff;">int</span>) <span style="color: #795e26;">Sqrt</span>(<span style="color: #001080;">m</span>) == <span style="color: #001080;">m</span>;</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #795e26;">IsPerfectSquare</span>(<span style="color: #09885a;">5</span> * <span style="color: #001080;">n</span> * <span style="color: #001080;">n</span> + <span style="color: #09885a;">4</span>) || <span style="color: #795e26;">IsPerfectSquare</span>(<span style="color: #09885a;">5</span> * <span style="color: #001080;">n</span> * <span style="color: #001080;">n</span> - <span style="color: #09885a;">4</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> (<span style="color: #001080;">n</span> &lt; <span style="color: #09885a;">2</span>) ? <span style="color: #001080;">n</span> : <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #001080;">n</span> - <span style="color: #09885a;">1</span>) + <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #001080;">n</span> - <span style="color: #09885a;">2</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNextFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #001080;">Enumerable</span>.<span style="color: #795e26;">Range</span>(<span style="color: #09885a;">0</span>, <span style="color: #001080;">n</span>+<span style="color: #09885a;">2</span>).<span style="color: #795e26;">Select</span>(<span style="color: #001080;">GetNthFibonacci</span>).<span style="color: #795e26;">First</span>(m =&gt; <span style="color: #001080;">m</span> &gt; <span style="color: #001080;">n</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><div>}</div></code>
-
-        <code><div>[<span style="color: #267f99;">ContractClassFor</span>(<span style="color: #0000ff;">typeof</span>(<span style="color: #267f99;">IFibonacci</span>))]</div><div><span style="color: #0000ff;">abstract</span> <span style="color: #0000ff;">class</span> <span style="color: #267f99;">FibonacciContract</span> : <span style="color: #267f99;">IFibonacci</span></div><div>{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">bool</span> <span style="color: #795e26;">IsFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Ensures</span>(<span style="color: #001080;">n</span> &gt;= <span style="color: #09885a;">0</span> || <span style="color: #795e26;">Result</span>&lt;<span style="color: #0000ff;">bool</span>&gt;() == <span style="color: #0000ff;">false</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #0000ff;">default</span>(<span style="color: #0000ff;">bool</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Requires</span>(<span style="color: #001080;">n</span> &gt;= <span style="color: #09885a;">0</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Ensures</span>(((<span style="color: #267f99;">IFibonacci</span>)<span style="color: #0000ff;">this</span>).<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #795e26;">Result</span>&lt;<span style="color: #0000ff;">int</span>&gt;()));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Ensures</span>(<span style="color: #001080;">n</span> &gt; <span style="color: #09885a;">1</span> || <span style="color: #795e26;">Result</span>&lt;<span style="color: #0000ff;">int</span>&gt;() == <span style="color: #001080;">n</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Ensures</span>(<span style="color: #795e26;">n</span> &lt; 2 || <span style="color: #267f99;">Enumerable</span>.<span style="color: #267f99;">Range</span>(0, <span style="color: #267f99;">Result</span>&lt;<span style="color: #0000ff;">int</span>&gt;() + 1).<span style="color: #267f99;">Count</span>(<span style="color: #267f99;">m</span> =&gt; ((<span style="color: #267f99;">IFibonacci</span>)<span style="color: #0000ff;">this</span>).<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #001080;">m</span>)) == <span style="color: #001080;">n</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #0000ff;">default</span>(<span style="color: #0000ff;">int</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">int</span> <span style="color: #795e26;">GetNextFibonacci</span>(<span style="color: #0000ff;">int</span> n)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Requires</span>(((<span style="color: #267f99;">IFibonacci</span>)<span style="color: #0000ff;">this</span>).<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #001080;">n</span>));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Ensures</span>(((<span style="color: #267f99;">IFibonacci</span>)<span style="color: #0000ff;">this</span>).<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #795e26;">Result</span>&lt;<span style="color: #0000ff;">int</span>&gt;()));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #795e26;">Ensures</span>(<span style="color: #795e26;">ForAll</span>(<span style="color: #001080;">n</span> + <span style="color: #09885a;">1</span>, <span style="color: #795e26;">Result</span>&lt;<span style="color: #0000ff;">int</span>&gt;(), m =&gt; !((<span style="color: #267f99;">IFibonacci</span>)<span style="color: #0000ff;">this</span>).<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #001080;">m</span>)));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #af00db;">return</span> <span style="color: #0000ff;">default</span>(<span style="color: #0000ff;">int</span>);</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><div>}</div></code>
-
-        <code><div><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span> <span style="color: #267f99;">FibonacciTest</span> : <span style="color: #267f99;">Fibonacci</span></div><div>{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;[<span style="color: #267f99;">Theory</span>] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">0</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">21</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">1597</span>)]</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> <span style="color: #795e26;">FibonacciNumbersAreRecognized</span>(<span style="color: #0000ff;">int</span> number)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #001080;">Assert</span>.<span style="color: #795e26;">True</span>(<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #001080;">number</span>));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;[<span style="color: #267f99;">Theory</span>] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">4</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">22</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">1598</span>)]</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> <span style="color: #795e26;">NonFibonacciNumbersAreRecognized</span>(<span style="color: #0000ff;">int</span> number)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #001080;">Assert</span>.<span style="color: #795e26;">False</span>(<span style="color: #795e26;">IsFibonacci</span>(<span style="color: #001080;">number</span>));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;[<span style="color: #267f99;">Theory</span>] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">0</span>, <span style="color: #09885a;">0</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">8</span>, <span style="color: #09885a;">21</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">17</span>, <span style="color: #09885a;">1597</span>)]</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> <span style="color: #795e26;">NthFibonacciNumberIsCalculated</span>(<span style="color: #0000ff;">int</span> n, <span style="color: #0000ff;">int</span> expectation)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #001080;">Assert</span>.<span style="color: #795e26;">Equal</span>(<span style="color: #001080;">expectation</span>, <span style="color: #795e26;">GetNthFibonacci</span>(<span style="color: #001080;">n</span>));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><br><div>&nbsp;&nbsp;&nbsp;&nbsp;[<span style="color: #267f99;">Theory</span>] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">0</span>, <span style="color: #09885a;">1</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">13</span>, <span style="color: #09885a;">21</span>)] [<span style="color: #267f99;">InlineData</span>(<span style="color: #09885a;">987</span>, <span style="color: #09885a;">1597</span>)]</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #0000ff;">public</span> <span style="color: #0000ff;">void</span> <span style="color: #795e26;">NextFibonacciNumberIsCalculated</span>(<span style="color: #0000ff;">int</span> current, <span style="color: #0000ff;">int</span> expectedNext)</div><div>&nbsp;&nbsp;&nbsp;&nbsp;{</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #001080;">Assert</span>.<span style="color: #795e26;">Equal</span>(<span style="color: #001080;">expectedNext</span>, <span style="color: #795e26;">GetNextFibonacci</span>(<span style="color: #001080;">current</span>));</div><div>&nbsp;&nbsp;&nbsp;&nbsp;}</div><div>}</div></code>
+</code></p>
     </section>
 	<section data-title="Contracts and Unit Tests">
 		<style>
@@ -199,7 +180,7 @@ public class FibonacciTest : Fibonacci
 			</tr>
 			<tr>
 				<td>
-					Check public and private code
+					Check public and private methods
 				</td>
 				<td>
 					Check only public methods
@@ -355,9 +336,11 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 	<section data-title="Contract rewriter">
 		<ul>
 			<li>Is required for runtime checking</li>
+<!--
 			<li>Defines conditional compilation symbols:
 				<code class="csharp">#define DEBUG
 #define CONTRACTS_FULL</code></li>
+-->
 			<li>Injects ContractsRuntime class into assembly</li>
 			<li>Replaces calls to Contract.* by calls to ContractsRuntime.*, passing both boolean expression and its code as a string</li>
 			<li>Transforms contracts validated at method exit into more complex generated code:
@@ -397,8 +380,8 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 			<li>ContractsRuntime methods do actual check and react on failure
 				<ul>
 					<li>call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent<sup>1</sup><sup>2</sup></li>
-					<li>which calls registered handlers and native runtime-specific method (e.g. displaying error window)<sup>3</sup><sup>4</sup></li>
-					<li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException</li>
+					<li>which calls registered handlers and runtime-specific method (e.g. displaying assertion error window)<sup>3</sup><sup>4</sup></li>
+					<li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException containing string representation of failed contract</li>
 				</ul>
 			</li>
 		</ul>
