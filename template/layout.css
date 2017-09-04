@@ -124,6 +124,12 @@ section .footnotes>*:before {
 
 section.agenda ol {
     list-style-type: none;
+    column-width: 22em;
+}
+
+section ol > *, 
+section ul > * {
+    display: list-item;
 }
 
 section[data-footer]:after {
