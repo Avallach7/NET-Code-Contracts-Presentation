@@ -106,3 +106,10 @@ section .footnotes {
 .irrelevant {
     opacity: 0.3;
 }
+
+.hideIrrelevant .irrelevant,
+.hideIrrelevant .footnote-link,
+.hideIrrelevant sup,
+.hideIrrelevant .footnotes {
+    display: none;
+}

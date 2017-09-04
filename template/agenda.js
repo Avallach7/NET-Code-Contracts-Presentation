@@ -1,5 +1,4 @@
 window.addEventListener("load", function () {
-    //var slides = document.getElementsByTagName("section");
     [].forEach.call(document.getElementsByClassName("agenda"), function (agenda) {
         function getTitle(slideIndex) {
             var slide = document.app.slides[slideIndex];

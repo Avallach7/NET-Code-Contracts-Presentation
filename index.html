@@ -31,6 +31,13 @@
 			/*TODO!!!*/
 		}
 	</style>
+    <script>
+        window.addEventListener("load", function () {
+            document.location.search.substr(1).split("&").forEach(function(param) {
+                document.body.classList.add(param);
+            });
+        });
+    </script>
 </head>
 
 <body>
