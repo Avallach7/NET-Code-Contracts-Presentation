@@ -72,12 +72,12 @@
 	</section>
 	<section data-title="Agenda" class="agenda"></section>
     <section data-title="Example code - problem">
-        <p>You need to reimplement some interface, but cannot guess from names what it should really do:
+        <p>You need to implement/understand/debug some interface, but cannot guess from names what it should really do:
         <code>public interface IFibonacci
 {
 	bool IsFibonacci(int n);
-	int GetNkLteEnbEarfcnAdj(int n);     // apparently someone wrote
-	int GetCPlnPbrSchUeNtActNext(int n); // these names in Finnish
+	int GetNkLteEnbEarfcnAdj(int n);     // apparently specs and
+	int GetCPlnPbrSchUeNtActNext(int n); // names are in Finnish
 }</code>
             Unit tests operate on example data and may not provide enough information for implementator:
             <code>public class FibonacciTest : Fibonacci
@@ -205,7 +205,7 @@ abstract class FibonacciContract : IFibonacci
 			</tr>
 			<tr>
 				<td>
-					Check public and private methods
+					Can be defined on public and private methods
 				</td>
 				<td>
 					Check only public methods
@@ -232,7 +232,7 @@ abstract class FibonacciContract : IFibonacci
 					Can target interfaces and check all their implementations
 				</td>
 				<td>
-					Can only target specific implementation
+					Can only target specific class
 				</td>
 			</tr>
 			<tr>
@@ -240,43 +240,39 @@ abstract class FibonacciContract : IFibonacci
 					Check pre- and post-conditions
 				</td>
 				<td>
-					Can only check postconditions
+					Check only postconditions
 				</td>
 			</tr>
 		</table>
 	</section>
 	<section data-title="History">
 		<ul>
-			<li>Developed at <a href="https://www.microsoft.com/en-us/research/group/research-in-software-engineering-rise/" data-footnote="microsoft.com/.../research-in-software-engineering-rise">Software Engineering division of Microsoft Research (RiSE)</a></li>
+			<li>Developed in 2008 at <a href="https://www.microsoft.com/en-us/research/group/research-in-software-engineering-rise/" data-footnote="microsoft.com/.../research-in-software-engineering-rise">Software Engineering division of Microsoft Research (RiSE)</a></li>
+            <li>Designed to improve testing, static analysis, and generation of documentation</li>
             <li>Open sourced (MIT License) and <a href="https://github.com/Microsoft/CodeContracts" data-footnote="github.com/Microsoft/CodeContracts">released on GitHub</a></li>
-            <li><a href="http://referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs" data-footnote="referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs">Added to Base Class Library</a></li>
-            <li>Internally used in implementation of <a href="http://referencesource.microsoft.com/#mscorlib/system/array.cs,2904" data-footnote="referencesource.microsoft.com/#mscorlib/system/array.cs">.NET Framework</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Array.cs#L52" data-footnote="dotnet/coreclr/.../mscorlib/src/System/Array.cs">.NET Core</a></li>
-            <li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET" data-footnote="marketplace.visualstudio.com/.../CodeContractsforNET">RiSE toolset supports only Visual Studio 2015 and full .NET Framework</a></li>
-		</ul>
-	</section>
-	<section data-title=".NET Core support">
-		<ul>
-            <li>source code repository contains implementation of <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs">Contracts class</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs">failure handling code for runtime checking</a></li>
-            <li>this code can only be used internally by framework, and for applications stub is exposed trough package <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs" data-footnote="github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs">System.Diagnostics.Contracts</a> instead</li>
-            <li>such built-in runtime support is not required, but <a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">community still has to develop new toolset</a></li>
-            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may be very helpful</li>
+            <li><a href="http://referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs" data-footnote="referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs">Added to Base Class Library</a>, used internally in <a href="http://referencesource.microsoft.com/#mscorlib/system/array.cs,2904" data-footnote="referencesource.microsoft.com/#mscorlib/system/array.cs">.NET Framework</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Array.cs#L52" data-footnote="dotnet/coreclr/.../mscorlib/src/System/Array.cs">Core</a></li>
+<!--            <li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET" data-footnote="marketplace.visualstudio.com/.../CodeContractsforNET">RiSE toolset supports only full .NET Framework and Visual Studio 2015 and below</a></li>-->
+<!--            <li>Source code repository contains implementation of <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs">Contracts class</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs">failure handling code for runtime checking</a></li>-->
+<!--            <li>This code can only be used internally by framework, and for applications stub is exposed trough package <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs" data-footnote="github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs">System.Diagnostics.Contracts</a> instead</li>-->
+            <li><a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">For full .NET Core support, new toolset is needed</a></li>
+            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may help with modern re-implementation</li>
 		</ul>
 	</section>
 	<section data-title="Contract packages">
 		<ul>
-			<li><strong><a href="https://www.nuget.org/packages/System.Diagnostics.Contracts/" data-footnote="nuget.org/packages/System.Diagnostics.Contracts">System.Diagnostics.Contracts</a></strong>
-				<ul>
-					<li>.NET Core compatible</li>
-					<li>All methods are stubbed (does nothing)</li>
-					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
-				</ul>
-			</li>
             <li><strong><a href="https://www.nuget.org/packages/DotNet.Contracts/" data-footnote="nuget.org/packages/DotNet.Contracts">DotNet.Contracts</a></strong>
 				<ul>
-					<li>.NET Core incompatible</li>
 					<li>Documentation generator, static and runtime checker</li>
-					<li>VS2015 extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
+					<li>Visual Studio extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
+					<li>Incompatible with .NET Core and VS2017+</li>
 					<li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
+				</ul>
+			</li>
+			<li><strong><a href="https://www.nuget.org/packages/System.Diagnostics.Contracts/" data-footnote="nuget.org/packages/System.Diagnostics.Contracts">System.Diagnostics.Contracts</a></strong>
+				<ul>
+					<li>Just stubbed interface</li>
+					<li>.NET Core compatible</li>
+					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
 				</ul>
 			</li>
 		</ul>
