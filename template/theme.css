@@ -78,7 +78,8 @@ section code .hljs-keyword,
 section code .hljs-title,
 section code .hljs-string, 
 section code .hljs-number,
-section code .hljs-literal
+section code .hljs-literal,
+section code .hljs-meta
 {
     font-weight: 800;
 }
@@ -95,8 +96,7 @@ section code .hljs-literal {
 }
 
 section code .hljs-meta {
-    color: #00b79f;
-    color: #0000ff;
+    color: #5800ff;
 }
 
 section code .hljs-title {
