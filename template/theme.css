@@ -63,8 +63,48 @@ section code {
     line-height: 1.5em;
 }
 
-section code strong {
+/*section code .hljs-keyword, */
+section code .hljs-attribute, 
+section code .hljs-selector-tag, 
+section code .hljs-meta-keyword, 
+section code .hljs-doctag,
+section code .hljs-name {
+    font-weight: 100;
+}
+
+section code strong,
+section code .hljs-comment,
+section code .hljs-keyword,
+section code .hljs-title,
+section code .hljs-string, 
+section code .hljs-number,
+section code .hljs-literal
+{
     font-weight: 800;
+}
+
+section code .hljs-keyword
+{
+/*    color: #0000ff;*/
+}
+
+section code .hljs-string, 
+section code .hljs-number,
+section code .hljs-literal {
+    color: #a31515;
+}
+
+section code .hljs-meta {
+    color: #00b79f;
+    color: #0000ff;
+}
+
+section code .hljs-title {
+    color: #007cff;
+}
+
+section code .hljs-comment {
+    color: #008000;
 }
 
 section[data-title]:before,

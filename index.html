@@ -8,20 +8,22 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="template/layout.css" rel="stylesheet">
 	<link href="template/theme.css" rel="stylesheet">
-    <link rel="stylesheet"
-      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="template/highlight.min.js"></script>
     <script>
         window.addEventListener("load", function () {
+            hljs.configure({ languages: [ "csharp "] });
             if (document.location.host.startsWith("127.0.0.1"))
                 return;
-            var codes = document.querySelectorAll("code[class]");
+            var codes = document.getElementsByTagName("code");
             for (i = 0; i < codes.length; i++) {
+                codes[i].classList.add("language-csharp");
                 hljs.highlightBlock(codes[i]);
                 codes[i].classList.remove("hljs");
             }
         });
     </script>
+    
+    
 	<script src="template/switcher.js"></script>
 	<script src="template/agenda.js"></script>
 	<script src="template/peer.min.js"></script>
@@ -55,14 +57,14 @@
 	<section data-title="Agenda" class="agenda"></section>
     <section data-title="Example code - problem">
         <p>You need to reimplement some interface, but cannot guess from names what it should really do:
-        <code class="csharp">public interface IFibonacci
+        <code>public interface IFibonacci
 {
 	bool IsFibonacci(int n);
-	int GetNkLteEnbEarfcnAdj(int n);       // apparently someone
-	int GetCPlanePbrSchUeNtActNext(int n); // wrote those in Finnish
+	int GetNkLteEnbEarfcnAdj(int n);     // apparently someone wrote
+	int GetCPlnPbrSchUeNtActNext(int n); // these names in Finnish
 }</code>
-            Unit tests operate on example data and may not be enough to design generic implementation:
-            <code class="csharp">public class FibonacciTest : Fibonacci
+            Unit tests operate on example data and may not provide enough information for implementator:
+            <code>public class FibonacciTest : Fibonacci
 {
 	[Theory] [InlineData(0, 0)] [InlineData(8, 21)] [InlineData(17, 1597)]
 	public void NkLteEnbEarfcnAdjIsCalculated(int n, int expectation)
@@ -77,8 +79,8 @@
 }</code></p>
     </section>
     <section data-title="Example code - contract">
-        <p>Contracts help to express generic intention behind interface:
-            <code class="csharp">[ContractClassFor(typeof(IFibonacci))]
+        <p>Contracts help to clearly express generic intention behind interface:
+            <code>[ContractClassFor(typeof(IFibonacci))]
 abstract class FibonacciContract : IFibonacci
 {
 	public int GetNkLteEnbEarfcnAdj(int n)
@@ -102,8 +104,8 @@ abstract class FibonacciContract : IFibonacci
 </code></p>
     </section>
     <section data-title="Example code - contract cont.">
-        <p>Contracts help to express generic intention behind interface:
-            <code class="csharp">[ContractClassFor(typeof(IFibonacci))]
+        <p>Contracts help to clearly express generic intention behind interface:
+            <code>[ContractClassFor(typeof(IFibonacci))]
 abstract class FibonacciContract : IFibonacci
 {
 	public int GetNthFibonacci(int n)
@@ -127,8 +129,8 @@ abstract class FibonacciContract : IFibonacci
 </code></p>
     </section>
     <section data-title="Example code - contract cont.">
-        <p>Contracts help to express generic intention behind interface:
-            <code class="csharp">[ContractClassFor(typeof(IFibonacci))]
+        <p>Contracts help to clearly express generic intention behind interface:
+            <code>[ContractClassFor(typeof(IFibonacci))]
 abstract class FibonacciContract : IFibonacci
 {
 	public int GetNthFibonacci(int n)
@@ -195,7 +197,7 @@ abstract class FibonacciContract : IFibonacci
 			</tr>
 			<tr>
 				<td>
-					Checked during unit tests, debug sessions, exploratory tests, with static analyzer or even on production
+					Checked during unit tests, debug sessions, manual exploratory tests, with static analyzer or even on production
 				</td>
 				<td>
 					Have to be ran explicitly
@@ -287,26 +289,26 @@ abstract class FibonacciContract : IFibonacci
 			}
 		</style>
 		<center>
-			<code class="csharp">// The .NET Foundation licenses this file to you under the MIT license.
+			<code>// The .NET Foundation licenses this file to you under the MIT license.
 namespace <strong>System.Diagnostics.Contracts</strong>
 {
     public static class <strong>Contract</strong>
     {
-        event EventHandler&lt;ContractFailedEventArgs&gt; <strong>ContractFailed</strong> { add { } remove { } }
+        event EventHandler&lt;ContractFailedEventArgs&gt; <span class="hljs-title"><strong>ContractFailed</strong></span> { add { } remove { } }
         void <strong>Assert</strong>(bool condition, string userMessage) { }
         void <strong>Assume</strong>(bool condition, string userMessage) { }
         void <strong>Ensures</strong>(bool condition, string userMessage) { }
-        void <strong>EnsuresOnThrow&lt;TException&gt;</strong>(bool condition, string userMessage)
+        void <span class="hljs-title"><strong>EnsuresOnThrow&lt;TException&gt;</strong></span>(bool condition, string userMessage)
             where TException : Exception { }
-        bool <strong>Exists&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
-        bool <strong>ForAll&lt;T&gt;</strong>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
+        bool <span class="hljs-title"><strong>Exists&lt;T&gt;</strong></span>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
+        bool <span class="hljs-title"><strong>ForAll&lt;T&gt;</strong></span>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
         void <strong>Invariant</strong>(bool condition, string userMessage) { }
-        T <strong>OldValue&lt;T&gt;</strong>(T value) { return default(T); }
+        T <span class="hljs-title"><strong>OldValue&lt;T&gt;</strong></span>(T value) { return default(T); }
         void <strong>Requires</strong>(bool condition, string userMessage) { }
-        void <strong>Requires&lt;TException&gt;</strong>(bool condition, string userMessage) 
+        void <span class="hljs-title"><strong>Requires&lt;TException&gt;</strong></span>(bool condition, string userMessage) 
             where TException : Exception { }
-        T <strong>Result&lt;T&gt;</strong>() { return default(T); }
-        T <strong>ValueAtReturn&lt;T&gt;</strong>(out T value) { value = default(T); return value; }
+        T <span class="hljs-title"><strong>Result&lt;T&gt;</strong></span>() { return default(T); }
+        T <span class="hljs-title"><strong>ValueAtReturn&lt;T&gt;</strong></span>(out T value) { value = default(T); return value; }
     }
     public class <strong>Pure</strong>Attribute : Attribute { }
 }</code>
@@ -316,14 +318,14 @@ namespace <strong>System.Diagnostics.Contracts</strong>
 		<ul>
 			<li>Designed to do nothing when runtime checking is off (no performance overhead!)</li>
 			<li>Assertion methods are compiled conditionally:
-				<code class="csharp">[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
+				<code>[<strong>Conditional</strong>("DEBUG"), <strong>Conditional</strong>("CONTRACTS_FULL")]
 void Ensures(bool condition, string userMessage) {...}</code></li>
 			<li>Helper methods should only be used as their inline parameters:
-				<code class="csharp">// returns, so cannot be [Conditional]
+				<code>// returns, so cannot be [Conditional]
 <strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
 Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // both will be either rewritten or omitted</code></li>
 			<li>"Hacking" Contract methods to run <strong>without rewriter</strong> results in unspecified behaviour:
-				<code class="csharp">bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. throw or always return false)
+				<code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. throw or always return false)
 <strong>#define DEBUG
 #define CONTRACTS_FULL</strong>
 Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)</code></li>
@@ -333,7 +335,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 		<ul>
 			<li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
 			<li>Suggests contracts where they are not declared but can be deduced (implicit contracts):
-				<code class="csharp">CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
+				<code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
 			<li>Code is not needed to be ran at all</li>
 			<li>Reports contract violations that are <b>possible</b> according to structure of the code</li>
 			<li>Because of this, it also produces false-positives (as opposite to runtime checker)</li>
@@ -344,7 +346,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 			<li>Is required for runtime checking</li>
 <!--
 			<li>Defines conditional compilation symbols:
-				<code class="csharp">#define DEBUG
+				<code>#define DEBUG
 #define CONTRACTS_FULL</code></li>
 -->
 			<li>Injects ContractsRuntime class into assembly</li>
