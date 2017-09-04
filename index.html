@@ -322,7 +322,7 @@ namespace <strong>System.Diagnostics.Contracts</strong>
 void Ensures(bool condition, string userMessage) {...}</code></li>
 			<li>Helper methods should only be used as their inline parameters:
 				<code>// returns, so cannot be [Conditional]
-<strong>bool</strong> ForAll&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
+<strong>bool</strong> <span class="hljs-title">ForAll&lt;T&gt;</span>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) {...}
 Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>); // both will be either rewritten or omitted</code></li>
 			<li>"Hacking" Contract methods to run <strong>without rewriter</strong> results in unspecified behaviour:
 				<code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i); // ERROR (may e.g. throw or always return false)
