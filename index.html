@@ -9,58 +9,12 @@
 	<link href="template/layout.css" rel="stylesheet">
 	<link href="template/theme.css" rel="stylesheet">
     <script src="template/highlight.min.js"></script>
-    <script>
-        window.addEventListener("load", function () {
-            hljs.configure({ languages: [ "csharp "] });
-            if (document.location.host.startsWith("127.0.0.1"))
-                return;
-            var codes = document.getElementsByTagName("code");
-            for (i = 0; i < codes.length; i++) {
-                codes[i].classList.add("language-csharp");
-                hljs.highlightBlock(codes[i]);
-                codes[i].classList.remove("hljs");
-            }
-        });
-    </script>
-    
-    
-	<script src="template/switcher.js"></script>
-	<script src="template/agenda.js"></script>
 	<script src="template/peer.min.js"></script>
-    <script>
-        window.addEventListener("load", function () {
-            var style = document.createElement('style');
-            style.textContent = `section::after { content: counter(slide) "/${document.app.slides.length}"; }`;
-            document.head.appendChild(style);
-        });
-    </script>
-    <script>
-        window.addEventListener("load", function () {
-            document.location.search.substr(1).split("&").forEach(function(param) {
-                if (param.length > 0)
-                    document.body.classList.add(param);
-            });
-        });
-    </script>
-    <script>
-        window.addEventListener("load", function () {
-            document.app.slides.forEach(function(slide) {
-                var footnotes = document.createElement("footer");
-                footnotes.classList.add("footnotes");
-                Array.prototype.slice.call(slide.querySelectorAll("*[data-footnote]")).forEach(function(hyperlink) {
-                    var footnote = document.createElement("a");
-                    footnote.href = hyperlink.href;
-                    footnote.textContent = hyperlink.dataset.footnote;
-                    footnotes.appendChild(footnote);
-                });
-                slide.appendChild(footnotes);
-            });
-        });
-    </script>
+	<script src="template/scripts.js"></script>
+	<script src="template/peer.integration.js"></script>
 </head>
 
 <body>
-	<!-- TODO: https://codepen.io/MadeByMike/pen/ZOrEmr -->
 	<section data-title=".NET Code Contracts" data-footer="Adam.Golebiowski @ NewVoiceMedia.com" class="title">
 		<style>
 			section.title>a.url {
