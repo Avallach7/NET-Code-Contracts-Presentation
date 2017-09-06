@@ -32,20 +32,25 @@ section {
     margin: 0 auto;
 }
 
-section:not(:empty):not(:first-of-type)::after {
+section::after {
     position: absolute;
     right: 5em;
-    bottom: 3em;
+    bottom: var(--vertical-padding);
     content: counter(slide);
+}
+
+
+section:empty::after,
+section:first-of-type::after,
+section.agenda::after {
+    display: none;
 }
 
 section[data-title]:before,
 section h1 {
     content: attr(data-title);
-    display: inline-block;
     margin: 0;
     margin-bottom: 0.5em;
-    text-align: left;
 }
 
 section>*:first-child {
@@ -132,9 +137,9 @@ section ul > * {
 
 section[data-footer]:after {
     content: attr(data-footer);
-    position: absolute;
-    bottom: 1em;
+    bottom: var(--vertical-padding);
     display: block;
+    right: unset;
 }
 
 section .background {

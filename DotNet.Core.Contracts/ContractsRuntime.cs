@@ -140,7 +140,7 @@ namespace DotNet.Core.Contracts
         public static bool Exists(int fromInclusive, int toExclusive, Predicate<int> predicate)
 		{
 			return Enumerable
-				.Range(fromInclusive, toExclusive-fromInclusive)
+				.Range(fromInclusive, toExclusive-fromInclusive-1)
 				.Any(i => predicate(i));
 		}
 
@@ -152,7 +152,7 @@ namespace DotNet.Core.Contracts
         public static bool ForAll(int fromInclusive, int toExclusive, Predicate<int> predicate)
 		{
 			return Enumerable
-				.Range(fromInclusive, toExclusive-fromInclusive)
+				.Range(fromInclusive, toExclusive-fromInclusive-1)
 				.All(i => predicate(i));
 		}
 

@@ -25,9 +25,9 @@ namespace DotNet.Core.Contracts
 
 	class ContractRewriter : CSharpSyntaxRewriter
 	{
-		private SemanticModel semanticModel;
-		private Type sourceType;
-		private Type targetType;
+		private readonly SemanticModel semanticModel;
+		private readonly Type sourceType;
+		private readonly Type targetType;
 		private readonly ExpressionSyntax targetTypeReference;
 
 		public ContractRewriter(SemanticModel semanticModel, Type sourceType, Type targetType)
