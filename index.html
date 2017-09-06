@@ -26,7 +26,7 @@
 		<a class="url" href="https://avallach.ovh/contracts">avallach.ovh/contracts</a>
 	</section>
 	<section data-title="Agenda" class="agenda"></section>
-    <section data-title="Example code - problem">
+    <section data-title="Example code - interface and tests">
         <p>You need to implement/understand/debug some interface, but cannot guess from names what it should really do:
         <code>public interface IFibonacci
 {
@@ -209,63 +209,70 @@ abstract class FibonacciContract : IFibonacci
 <!--            <li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET" data-footnote="marketplace.visualstudio.com/.../CodeContractsforNET">RiSE toolset supports only full .NET Framework and Visual Studio 2015 and below</a></li>-->
 <!--            <li>Source code repository contains implementation of <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs">Contracts class</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs">failure handling code for runtime checking</a></li>-->
 <!--            <li>This code can only be used internally by framework, and for applications stub is exposed trough package <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs" data-footnote="github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs">System.Diagnostics.Contracts</a> instead</li>-->
-            <li><a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">For full .NET Core support, new toolset is needed</a></li>
-            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may help with modern re-implementation</li>
+            <li><a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">Microsoft is not working on .NET Core compatible toolset</a></li>
+<!--            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may help with modern re-implementation</li>-->
 		</ul>
 	</section>
 	<section data-title="Contract packages">
 		<ul>
             <li><strong><a href="https://www.nuget.org/packages/DotNet.Contracts/" data-footnote="nuget.org/packages/DotNet.Contracts">DotNet.Contracts</a></strong>
 				<ul>
-					<li>Documentation generator, static and runtime checker</li>
+					<li>Documentation generator, rewriter, static and runtime checker</li>
 					<li>Visual Studio extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
 					<li>Incompatible with .NET Core and VS2017+</li>
-					<li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
+<!--					<li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>-->
 				</ul>
 			</li>
 			<li><strong><a href="https://www.nuget.org/packages/System.Diagnostics.Contracts/" data-footnote="nuget.org/packages/System.Diagnostics.Contracts">System.Diagnostics.Contracts</a></strong>
 				<ul>
 					<li>Just stubbed interface</li>
 					<li>.NET Core compatible</li>
-					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>
+<!--					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>-->
+				</ul>
+			</li>
+			<li><strong>DotNet.Core.Contracts</strong>
+				<ul>
+<!--					<li>.NET Core compatible</li>-->
+					<li>Interface, rewriter, and runtime checker</li>
+					<li>Does not exist yet, can be developed by community with Roslyn or Fody</li>
 				</ul>
 			</li>
 		</ul>
 	</section>
-	<section data-title="Contract interface in BCL">
+	<section data-title="Contract method stubs">
 		<style>
-			section[data-title="Contract interface in BCL"] code {
-				font-size: 0.65em;
+			section[data-title="Contract method stubs"] code {
+				font-size: 0.8em;
 				display: inline-block;
 			}
 		</style>
 		<center>
-			<code>// The .NET Foundation licenses this file to you under the MIT license.
-namespace <strong>System.Diagnostics.Contracts</strong>
+			<code><!--// The .NET Foundation licenses this file to you under the MIT license.
+-->namespace <strong>System.Diagnostics.Contracts</strong>
 {
     public static class <strong>Contract</strong>
     {
-        event EventHandler&lt;ContractFailedEventArgs&gt; <span class="hljs-title"><strong>ContractFailed</strong></span> { add { } remove { } }
-        void <strong>Assert</strong>(bool condition, string userMessage) { }
-        void <strong>Assume</strong>(bool condition, string userMessage) { }
-        void <strong>Ensures</strong>(bool condition, string userMessage) { }
-        void <span class="hljs-title"><strong>EnsuresOnThrow&lt;TException&gt;</strong></span>(bool condition, string userMessage)
-            where TException : Exception { }
-        bool <span class="hljs-title"><strong>Exists&lt;T&gt;</strong></span>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
-        bool <span class="hljs-title"><strong>ForAll&lt;T&gt;</strong></span>(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) { return false; }
-        void <strong>Invariant</strong>(bool condition, string userMessage) { }
-        T <span class="hljs-title"><strong>OldValue&lt;T&gt;</strong></span>(T value) { return default(T); }
-        void <strong>Requires</strong>(bool condition, string userMessage) { }
-        void <span class="hljs-title"><strong>Requires&lt;TException&gt;</strong></span>(bool condition, string userMessage) 
-            where TException : Exception { }
-        T <span class="hljs-title"><strong>Result&lt;T&gt;</strong></span>() { return default(T); }
-        T <span class="hljs-title"><strong>ValueAtReturn&lt;T&gt;</strong></span>(out T value) { value = default(T); return value; }
-    }
-    public class <strong>Pure</strong>Attribute : Attribute { }
+        event EventHandler&lt;ContractFailedEventArgs&gt; <span class="hljs-title"><strong>ContractFailed</strong></span> <span class="irrelevant" data-replacement=";">{ add { } remove { } }</span>
+        void <strong>Assert</strong>(bool condition<span class="irrelevant">, string userMessage</span>) <span class="irrelevant" data-replacement=";">{ }</span>
+        void <strong>Assume</strong>(bool condition<span class="irrelevant">, string userMessage</span>) <span class="irrelevant" data-replacement=";">{ }</span>
+        void <strong>Ensures</strong>(bool condition<span class="irrelevant">, string userMessage</span>) <span class="irrelevant" data-replacement=";">{ }</span>
+        void <span class="hljs-title"><strong>EnsuresOnThrow</strong></span>&lt;TException&gt;(bool condition<span class="irrelevant">, string userMessage</span>)
+            where TException : Exception <span class="irrelevant">{ }</span>
+        bool <span class="hljs-title"><strong>Exists</strong></span>&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) <span class="irrelevant" data-replacement=";">{ return false; }</span>
+        bool <span class="hljs-title"><strong>ForAll</strong></span>&lt;T&gt;(IEnumerable&lt;T&gt; collection, Predicate&lt;T&gt; predicate) <span class="irrelevant" data-replacement=";">{ return false; }</span>
+        void <strong>Invariant</strong>(bool condition<span class="irrelevant">, string userMessage</span>) <span class="irrelevant" data-replacement=";">{ }</span>
+        T <span class="hljs-title"><strong>OldValue&lt;T&gt;</strong></span>(T value) <span class="irrelevant" data-replacement=";">{ return default(T); }</span>
+        void <strong>Requires</strong>(bool condition<span class="irrelevant">, string userMessage</span>) <span class="irrelevant" data-replacement=";">{ }</span><!--
+        void <span class="hljs-title"><strong>Requires&lt;TException&gt;</strong></span>(bool condition, string userMessage)
+            where TException : Exception <span class="irrelevant">{ }</span> -->
+        T <span class="hljs-title"><strong>Result</strong></span>&lt;T&gt;() <span class="irrelevant" data-replacement=";">{ return default(T); }</span>
+        T <span class="hljs-title"><strong>ValueAtReturn</strong></span>&lt;T&gt;(out T value) <span class="irrelevant" data-replacement=";">{ value = default(T); return value; }</span>
+    }<!--
+    public class <strong>Pure</strong>Attribute : Attribute { }-->
 }</code>
 		</center>
 	</section>
-	<section data-title="Contract method stubs">
+	<section data-title="Contract method stubs cont.">
 		<ul>
 			<li>Designed to do nothing when runtime checking is off (no performance overhead!)</li>
 			<li>Assertion methods are compiled conditionally:

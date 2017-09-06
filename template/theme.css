@@ -162,3 +162,7 @@ section *[data-footnote]:after {
 .hideIrrelevant *[data-footnote]:after {
     display: none;
 }
+
+.hideIrrelevant .irrelevant[data-replacement]::after {
+    content: attr(data-replacement);
+}

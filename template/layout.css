@@ -135,6 +135,10 @@ section ul > * {
     display: list-item;
 }
 
+section li:last-child {
+    padding-bottom: 0;
+}
+
 section[data-footer]:after {
     content: attr(data-footer);
     bottom: var(--vertical-padding);
