@@ -1,5 +1,6 @@
 document.app = {
     debug: false,
+    parameters: [],
     
     log: function(message) {
         if (document.app.debug)
@@ -66,15 +67,21 @@ document.app = {
         });
     },
 
-    exposeParametersToStyles: function() {
+    loadParameters: function() {
         document.location.search.substr(1).split("&").forEach(function(param) {
             if (param.length > 0)
-                document.body.classList.add(param);
+                document.app.parameters.push(param);
+        });
+    },
+    
+    exposeParametersToStyles: function() {
+        document.app.parameters.forEach(function(param) {
+            document.body.classList.add(param);
         });
     },
 
     setupDebugging: function() {
-        if (document.location.href.indexOf("debug") >= 0) {
+        if (document.app.parameters.indexOf("debug") >= 0) {
             document.app.debug = true;
             var consoleView = document.createElement("div");
             consoleView.id = "consoleView";
@@ -144,6 +151,7 @@ document.app = {
         document.app.initCodeHighlighting();
         document.app.addTotalNumberOfSlidesToCounter();
         document.app.addFootnotes();
+        document.app.loadParameters();
         document.app.exposeParametersToStyles();
         document.app.setupDebugging();
         document.app.switcher.init();

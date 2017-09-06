@@ -59,8 +59,8 @@ abstract class FibonacciContract : IFibonacci
 		Requires(n &gt;= 0);
         Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
 		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
-        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);
-        <span class="irrelevant">return default(int);</span>
+        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        return default(int);</span>
 	}
 
 	public int GetCPlnPbrSchUeNtActNext(int n)
@@ -68,8 +68,8 @@ abstract class FibonacciContract : IFibonacci
 		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
 		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
 		Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
-		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));
-		<span class="irrelevant">return default(int);</span>
+		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));<span class="irrelevant">
+		return default(int);</span>
 	}
 }
 </code></p>
@@ -84,8 +84,8 @@ abstract class FibonacciContract : IFibonacci
 		Requires(n &gt;= 0);
         Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
 		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
-        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);
-        <span class="irrelevant">return default(int);</span>
+        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        return default(int);</span>
 	}
 
 	public int GetCPlnPbrSchUeNtActNext(int n)
@@ -93,8 +93,8 @@ abstract class FibonacciContract : IFibonacci
 		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
 		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
 		Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
-		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));
-		<span class="irrelevant">return default(int);</span>
+		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));<span class="irrelevant">
+		return default(int);</span>
 	}
 }
 </code></p>
@@ -109,8 +109,8 @@ abstract class FibonacciContract : IFibonacci
 		Requires(n &gt;= 0);
         Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
 		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
-        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);
-        <span class="irrelevant">return default(int);</span>
+        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        return default(int);</span>
 	}
 
 	public int GetNextFibonacci(int n)
@@ -118,8 +118,8 @@ abstract class FibonacciContract : IFibonacci
 		Requires(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(n));
 		Ensures(Result<span class="irrelevant">&lt;int&gt;()</span> &gt; n);
 		Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
-		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));
-		<span class="irrelevant">return default(int);</span>
+		Ensures(ForAll(n + 1, Result<span class="irrelevant">&lt;int&gt;()</span>, m =&gt; !<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)));<span class="irrelevant">
+		return default(int);</span>
 	}
 }
 </code></p>
