@@ -11,7 +11,9 @@ document.app = {
         [].forEach.call(document.getElementsByClassName("agenda"), function (agenda) {
             function getTitle(slideIndex) {
                 var slide = document.app.slides[slideIndex];
-                if (slide.dataset.title != undefined && !slide.dataset.title.endsWith(" cont."))
+                if (slide.dataset.title != undefined && 
+                    !slide.dataset.title.endsWith(" cont.") &&
+                    !(slideIndex>0 && slide.dataset.title == document.app.slides[slideIndex-1].dataset.title))
                     return (slideIndex + 1) + ". " + slide.dataset.title;
                 else {
                     return undefined;
@@ -69,14 +71,10 @@ document.app = {
 
     loadParameters: function() {
         document.location.search.substr(1).split("&").forEach(function(param) {
-            if (param.length > 0)
+            if (param.length > 0) {
                 document.app.parameters.push(param);
-        });
-    },
-    
-    exposeParametersToStyles: function() {
-        document.app.parameters.forEach(function(param) {
-            document.body.classList.add(param);
+                document.body.classList.add(param);
+            }
         });
     },
 
@@ -152,7 +150,6 @@ document.app = {
         document.app.addTotalNumberOfSlidesToCounter();
         document.app.addFootnotes();
         document.app.loadParameters();
-        document.app.exposeParametersToStyles();
         document.app.setupDebugging();
         document.app.switcher.init();
     }
