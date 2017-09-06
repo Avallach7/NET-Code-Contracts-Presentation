@@ -1,4 +1,11 @@
 document.app = {
+    debug: false,
+    
+    log: function(message) {
+        if (document.app.debug)
+            console.log(message);
+    },
+    
     createAgenda: function() {
         [].forEach.call(document.getElementsByClassName("agenda"), function (agenda) {
             function getTitle(slideIndex) {
@@ -68,6 +75,7 @@ document.app = {
 
     setupDebugging: function() {
         if (document.location.href.indexOf("debug") >= 0) {
+            document.app.debug = true;
             var consoleView = document.createElement("div");
             consoleView.id = "consoleView";
             consoleView.style.position = "fixed";
@@ -88,6 +96,7 @@ document.app = {
 
     switcher: {
         onswitch: function (id) {},
+        
         activeSlideId: 0,
 
         isScrollingBack: function(event) {
@@ -106,7 +115,7 @@ document.app = {
         },
 
         onSlideChange: function(event) {
-            console.log(`document.app.switcher.onSlideChange(${event.type})`);
+            document.app.log(`document.app.switcher.onSlideChange(${event.type})`);
             var newSlide = document.app.switcher.activeSlideId + (document.app.switcher.isScrollingBack(event) ? -1 : 1);
             if (newSlide >= document.app.slides.length)
                 newSlide = 0;
