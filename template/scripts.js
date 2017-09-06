@@ -28,7 +28,7 @@ document.app = {
                 if (title == undefined)
                     return;
                 var entry = document.createElement("a");
-                entry.href = "javascript:document.app.slides[" + index + "].scrollIntoView(true)";
+                entry.href = "javascript:document.app.switcher.setSlide(" + index + ")";
                 entry.textContent = title;
                 list.appendChild(entry);
             });
