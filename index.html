@@ -314,7 +314,7 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 			<li>Inlines ValueAtReturn and code marked with ContractClassFor or ContractAbbreviator</li>
 		</ul>
 	</section>
-	<section data-title="Control flow transforms">
+	<section data-title="Contract rewriter - internals">
 		<ul>
 			<!--TODO: symbolical diagrams representing those, text left as a comment-->
 			<li>Control flow is modified to use generated helper local variable for storing result and single return statement at the
@@ -322,9 +322,10 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 			<li>Contract.Ensures is checked before that single return statement</li>
 			<li>Contract.EnsuresOnThrow causes whole method body to be wrapped in try block and is checked in its catch block</li>
 			<li>Contract.Invariant is checked at the end of each public method</li>
+            <li>Contract.ContractFailed is replaced with event ContractHelper.RaiseContractFailedEvent</li>
 		</ul>
 	</section>
-	<section data-title="Control flow transforms - cont.">
+	<section data-title="Contract rewriter - internals cont.">
 		<ul>
 			<li>Contract.Result is already moved to the end of method with enclosing Ensures and replaced by reference to previously generated
 				result variable, that is going to be returned afterwards</li>
@@ -336,12 +337,14 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 				contain contract shared by multiple methods</li>
 		</ul>
 	</section>
-	<section data-title="Runtime internals">
+	<section data-title="Contract rewriter - runtime internals">
 		<ul>
 			<li>ContractsRuntime methods do actual check and react on failure
 				<ul>
 					<li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs#L295" data-footnote="dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL/RaiseContractFailedEventImplementation">call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent</a></li>
 					<li>which calls registered handlers and <a href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556" data-footnote="dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure">runtime-specific method</a> (e.g. displaying assertion error window)</li>
+                    <li>registered handler may trigger custom action (e.g. trigger NUnit test failure or log it to Log4Net)</li>
+                    <li>if one of handlers returns true, violation is marked as handled and no further actions are taken</li>
 					<li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException containing string representation of failed contract</li>
 				</ul>
 			</li>
