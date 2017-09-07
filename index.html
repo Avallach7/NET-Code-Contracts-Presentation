@@ -240,15 +240,8 @@ abstract class FibonacciContract : IFibonacci
 		</ul>
 	</section>
 	<section data-title="Contract method stubs">
-		<style>
-			section[data-title="Contract method stubs"] code {
-				font-size: 0.8em;
-				display: inline-block;
-			}
-		</style>
 		<center>
-			<code><!--// The .NET Foundation licenses this file to you under the MIT license.
--->namespace <strong>System.Diagnostics.Contracts</strong>
+			<code style="font-size: 0.8em;display: inline-block;">namespace <strong>System.Diagnostics.Contracts</strong>
 {
     public static class <strong>Contract</strong>
     {
@@ -290,7 +283,16 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 		</ul>
 	</section>
 	<section data-title="Static checker">
-		<ul>
+        <img src="template/static-checking.svg" style="
+                    float: right;
+                    display: inline-block;
+                    width: 20em;
+                    margin-top: 3em;
+                ">
+        <ul style="
+            display: inline-block;
+            max-width: 30em;
+        ">
 			<li>Integrated with IDE (VS 2010-2015, produces ReSharper-like warnings)</li>
 			<li>Suggests contracts where they are not declared but can be deduced (implicit contracts):
 				<code>CodeContracts: Suggested requires: Contract.Requires(inputArray != null);</code></li>
@@ -314,49 +316,86 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
 			<li>Inlines ValueAtReturn and code marked with ContractClassFor or ContractAbbreviator</li>
 		</ul>
 	</section>
-	<section data-title="Contract rewriter - internals">
+	<section data-title="Contract rewriter - transformations">
+        <img src="template/transformations.svg" style="
+            display: block;
+            margin: 0 auto;
+            height: 8em;
+        ">
 		<ul>
 			<!--TODO: symbolical diagrams representing those, text left as a comment-->
+            <li>Contract.Requires is simply transformed to ContractsRuntime.Requires
+                <code>{ Contract.Requires(true); }</code>
+                <code>{ ContractsRuntime.Requires(true<span class="irrelevant">, "true"</span>); }</code></li>
+			<li>Contract.EnsuresOnThrow&lt;T&gt; wraps method body in try block and is checked in generated catch(T) block
+                <code>{ Contract.EnsuresOnThrow&lt;Exception&gt;(true); return 1; }</code>
+                <code>{ try { return 1; } catch(Exception e) { ContractsRuntime.EnsuresOnThrow(true<span class="irrelevant">, "true", e</span>); } }</code></li>
+<!--
 			<li>Control flow is modified to use generated helper local variable for storing result and single return statement at the
-				end of method</li>
-			<li>Contract.Ensures is checked before that single return statement</li>
-			<li>Contract.EnsuresOnThrow causes whole method body to be wrapped in try block and is checked in its catch block</li>
-			<li>Contract.Invariant is checked at the end of each public method</li>
-            <li>Contract.ContractFailed is replaced with event ContractHelper.RaiseContractFailedEvent</li>
+				end of method
+                <code>{ if (true) return 1; else return 2; }</code>
+                <code>{ int result; if (true) result = 1; else result = 2; return result; }</code></li>
+-->
 		</ul>
 	</section>
-	<section data-title="Contract rewriter - internals cont.">
+	<section data-title="Contract rewriter - transformations cont.">
 		<ul>
+			<li>Contract.Ensures generates variable "result", replaces every "return X" with "result = X" and is checked before single "return result" at end of the method
+                <code>{ Contract.Ensures(true); return 1; }</code>
+                <code>{ int result; result = 1; ContractsRuntime.Ensures(true<span class="irrelevant">, "true"</span>); return result; }</code></li>
 			<li>Contract.Result is already moved to the end of method with enclosing Ensures and replaced by reference to previously generated
-				result variable, that is going to be returned afterwards</li>
-			<li>Contract.ValueAtReturn is moved the same way as Result, and replaced by reference passed to it as parameter (theoretically
-				it could be any expression, as its literally executed just before return)</li>
-			<li>ContractClassFor attribute causes all method bodies in type marked with it to be prepended to their counterparts in type
-				passed as parameter to it</li>
-			<li>ContractAbbreviator attribute causes body of method marked with it to be inlined in place of calls to it, so that it can
-				contain contract shared by multiple methods</li>
+				"result" variable, that is going to be returned afterwards
+                <code>{ Contract.Ensures(Contract.Result&lt;int&gt;() == 1) return 1; }</code>
+                <code>{ int result; result = 1; ContractsRuntime.Ensures(result == 1<span class="irrelevant">, "result == 1"</span>); return result; }</code></li>
+			<li>Contract.ValueAtReturn is also moved with enclosing Ensures, and replaced by its parameter
+                <code>{ Contract.Ensures(Contract.ValueAtReturn&lt;int&gt;(this.hp > 0)) return 1; }</code>
+                <code>{ int result; result = 1; ContractsRuntime.Ensures(this.hp > 0<span class="irrelevant">, "this.hp > 0"</span>); return result; }</code></li>
 		</ul>
 	</section>
-	<section data-title="Contract rewriter - runtime internals">
+	<section data-title="Contract rewriter - transformations cont.">
 		<ul>
-			<li>ContractsRuntime methods do actual check and react on failure
+            <li>Contract.Invariant is checked at the end of each public method
+                <code>[ContractInvariantMethod] void Foo(){ Contract.Invariant(true); } public void Bar() { this.hp = 0; }</code>
+                <code>void Foo(){ ContractsRuntime.Invariant(true<span class="irrelevant">, "true"</span>); } public void Bar() { this.hp = 0; Foo(); }</code></li>
+			<li>ContractClassFor attribute causes all method bodies in type marked with it to be prepended to counterparts in all implementations of given interface
+                <code>[ContractClassFor(typeof(IFoo))]<span class="irrelevant"> abstract</span> class FooContract : IFoo { public int Bar() { Contract.Ensures(true);<span class="irrelevant"> return default(int);</span> } }
+class Foo : IFoo { public int Bar() { return 42; } </code>
+                <code>class Foo : IFoo { public int Bar() { ContractRuntime.Ensures(true<span class="irrelevant">, "true"</span>); return 42; } </code></li>
+			<li>ContractAbbreviator attribute causes body of method marked with it to be inlined in place of calls to it, so that it can
+				contain contract shared by multiple methods
+                <code>[ContractAbbreviator] void SharedContract() { Contract.Ensures(true); } void Foo() { SharedContract(); } void Bar() { SharedContract(); }</code>
+                <code>void Foo() { ContractsRuntime.Ensures(true<span class="irrelevant">, "true"</span>); } void Bar() { ContractsRuntime.Ensures(true<span class="irrelevant">, "true"</span>); }</code></li>
+		</ul>
+	</section>
+	<section data-title="Contract rewriter - runtime behaviour">
+        <img src="template/runtime-checking.svg" style="
+                    float: right;
+                    display: inline-block;
+                    width: 14em;
+                    margin-top: 5em;
+                ">
+        <ul style="
+            display: inline-block;
+            max-width: 39em;
+        ">
+			<li>Injected ContractsRuntime methods do actual check and react on contract violation
 				<ul>
 					<li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs#L295" data-footnote="dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL/RaiseContractFailedEventImplementation">call System.Runtime.CompilerServices.ContractHelper.RaiseContractFailedEvent</a></li>
-					<li>which calls registered handlers and <a href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556" data-footnote="dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure">runtime-specific method</a> (e.g. displaying assertion error window)</li>
-                    <li>registered handler may trigger custom action (e.g. trigger NUnit test failure or log it to Log4Net)</li>
-                    <li>if one of handlers returns true, violation is marked as handled and no further actions are taken</li>
+					<li>which calls handlers registered on Contract.ContractFailed triggering custom action (e.g. failing current NUnit test or logging to Log4Net)</li>
+                    <li>if any handler calls SetHandled on argument, no further actions are taken</li>
+            <li>otherwise, <a href="https://github.com/dotnet/coreclr/blob/master/src/vm/eepolicy.cpp#L1556" data-footnote="dotnet/coreclr/../vm/eepolicy/HandleCodeContractFailure">runtime-specific handler</a> <a href="https://msdn.microsoft.com/en-us/library/system.diagnostics.contracts.contract.contractfailed.aspx#Anchor_1" data-footnote="msdn.microsoft.com/.../System.Diagnostics.Contracts.Contract.ContractFailed">may be triggered</a></li>
 					<li>if not handled, throws System.Diagnostics.Contracts.ContractsRuntime.ContractException containing string representation of failed contract</li>
 				</ul>
 			</li>
 		</ul>
 	</section>
-    <section data-title=".NET Core toolset with Roslyn">
+    <section data-title=".NET Core toolset with Roslyn - PoC">
         <a href="https://github.com/dotnet/roslyn/wiki/Getting-Started-C%23-Syntax-Transformation" data-footnote="github.com/dotnet/roslyn/wiki/Getting Started C# Syntax Transformation">Roslyn (Microsoft.CodeAnalysis.CSharp) allows transformations of textual C# source code</a>:
         <code>partial class ContractRewriter : CSharpSyntaxRewriter // transforms e.g.: Contract.Requires(n > 0) to ContractRuntime.Requires(n > 0, "n > 0");
 {
     public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
     {
-        return IsContract(node) ? Rewrite(node) : node; // IsContract uses CSharpCompilation and SemanticModel
+        return IsContract(node) ? Rewrite(node) : node; // IsContract has to use CSharpCompilation and SemanticModel
     }
 
     private SyntaxNode Rewrite(InvocationExpressionSyntax node)
@@ -375,6 +414,16 @@ Contract.Requires(true); // ERROR (may e.g. do nothing, throw or fail assertion)
         return new ContractRewriter().Visit(CSharpSyntaxTree.ParseText(code).GetRoot()).ToFullString();
     }
 }</code>
+    </section>
+    <section data-title="Further reading">
+        <ul>
+            <li><a href="https://docs.microsoft.com/en-us/dotnet/api/System.Diagnostics.Contracts">docs.microsoft.com/dotnet/api/System.Diagnostics.Contracts</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/dotnet/api/System.Diagnostics.Contracts.Contract">docs.microsoft.com/dotnet/api/System.Diagnostics.Contracts.Contract</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/dotnet/api/System.Runtime.CompilerServices.ContractHelper">docs.microsoft.com/dotnet/api/System.Runtime.CompilerServices.ContractHelper</a></li>
+            <li><a href="https://docs.microsoft.com/en-us/dotnet/framework/debug-trace-profile/code-contracts">docs.microsoft.com/dotnet/framework/Debug-Trace-Profile/Code-Contracts</a></li>
+            <li><a href="https://www.microsoft.com/en-us/research/project/code-contracts">microsoft.com/research/project/Code-Contracts</a></li>
+            <li><a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>
+        </ul>
     </section>
 </body>
 
