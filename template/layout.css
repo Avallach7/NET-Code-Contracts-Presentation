@@ -168,3 +168,18 @@ ul {
     color: inherit;
     background: transparent;
 }
+
+
+    display: block;
+    width: 1.7em;
+    height: 1.7em;
+    position: absolute;
+    right: 2.3em;
+    bottom: 1.4em;
+}
+
+    d: path('M 50 50 m 0 -47 a 47 47 0 1 1 0 94 a 47 47 0 1 1 0 -94');
+    fill-opacity: 0;
+    stroke-dasharray: 300;
+    stroke-dashoffset: calc(var(--progress) * -300);
+}

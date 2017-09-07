@@ -166,3 +166,12 @@ section *[data-footnote]:after {
 .hideIrrelevant .irrelevant[data-replacement]::after {
     content: attr(data-replacement);
 }
+
+.progressbar {
+    opacity: 0.2;
+}
+
+.progressbar path {
+    stroke: rgb(0, 0, 0);
+    stroke-width: 6px;
+}

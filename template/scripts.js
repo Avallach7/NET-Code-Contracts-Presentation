@@ -142,6 +142,37 @@ document.app = {
             document.body.addEventListener("touchend", document.app.switcher.onSlideChange);
         }
     },
+    
+    progressbar: undefined,
+    
+    timeLengthMinutes: 30,
+    startTime: undefined,
+    
+    initProgressbar: function() {
+        if (document.app.parameters.indexOf("progress") > -1) {
+            document.app.slides.forEach(function(slide) {
+                // var svgNS = "http://www.w3.org/2000/svg";
+                // var progressbar = document.createElementNS(svgNS, "svg");
+                // progressbar.classList.add("progressbar");
+                // progressbar.setAttributeNS(svgNS, "viewBox", "0 0 100 100");
+                // var path = document.createElementNS(svgNS, "path");
+                // progressbar.appendChild(path);
+                // slide.appendChild(progressbar);
+                // ABOVE DOES NOT RENDER IN CHROME, UGLY HACK INSTEAD 
+                slide.innerHTML += '<svg class="progressbar" viewBox="0 0 100 100"><path></path></svg>';
+            });
+            document.app.startTime = new Date().getTime();
+            var loop = setInterval(function() {
+                var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
+                var progress = minutesElapsed / document.app.timeLengthMinutes;
+                if (progress >= 1) {
+                    progress = 1;
+                    clearInterval(loop);
+                }
+                document.body.style.setProperty("--progress", progress);
+            }, 1000);
+        }
+    },
 
     init: function() {
         document.app.slides = Array.prototype.slice.call(document.getElementsByTagName("section"));
@@ -152,6 +183,7 @@ document.app = {
         document.app.loadParameters();
         document.app.setupDebugging();
         document.app.switcher.init();
+        document.app.initProgressbar();
     }
 }
 
