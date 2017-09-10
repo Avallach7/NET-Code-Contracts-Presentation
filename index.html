@@ -20,7 +20,7 @@
     </section>
     <section data-title="Slides on your phone">
         <span style="display: block; margin: 0 auto; width: 10em; font-size: 2.0em; margin-bottom: 1em">avallach.ovh/contracts</span>
-        <img src="template/qr-code.svg" style="display: block; margin: 0 auto; height: 20em; border: 1em solid white;">
+        <img src="template/qr-code.svg" class="preserve-colors" style="display: block; margin: 0 auto; height: 20em; border: 1em solid white;">
     </section>
     <section data-title="Agenda" class="agenda"></section>
     <section data-title="Unit tests are not enough"></section>
@@ -61,9 +61,9 @@ abstract class FibonacciContract : IFibonacci
 	public int GetNkLteEnbEarfcnAdj(int n)
 	{
 		Requires(n &gt;= 0);
-        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
-		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
-        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));<span class="irrelevant">
+        Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);</span>
+        Ensures(<span class="irrelevant">n &lt; 2 || </span>Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
         return default(int);</span>
 	}
 
@@ -85,9 +85,9 @@ abstract class FibonacciContract : IFibonacci
 	public int GetNthFibonacci(int n)
 	{
 		Requires(n &gt;= 0);
-        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));
-		Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);
-        Ensures(n &lt; 2 || Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));<span class="irrelevant">
+        Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);</span>
+        Ensures(<span class="irrelevant">n &lt; 2 || </span>Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
         return default(int);</span>
 	}
 
@@ -199,7 +199,7 @@ abstract class FibonacciContract : IFibonacci
             <li><a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">Microsoft is not working on .NET Core compatible toolset</a></li>
             <!--            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may help with modern re-implementation</li>-->
         </ul>
-        <img src="template/microsoft-research.svg" style="float: right; width: 20em">
+        <img src="template/microsoft-research.svg" style="float: right; width: 20em" class="preserve-colors">
     </section>
     <section data-title="Contracts toolset" class="content-nextto-illustration">
         <ul>
@@ -254,7 +254,7 @@ abstract class FibonacciContract : IFibonacci
 }</code>
         </center>
     </section>
-    <section data-title="Contract method stubs cont.">
+    <section data-title="Contract method stubs">
         <ul>
             <li>Designed to do nothing when runtime checking is off (no performance overhead!)</li>
             <li>Assertion methods are compiled conditionally:
@@ -319,7 +319,7 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
 -->
         </ul>
     </section>
-    <section data-title="Contract rewriter - transformations cont.">
+    <section data-title="Contract rewriter - transformations">
         <ul>
             <li>Contract.Ensures generates variable "result", replaces every "return X" with "result = X" and is checked before single "return result" at end of the method
                 <code>{ Contract.Ensures(true); return 1; }</code>
@@ -329,7 +329,7 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
                 <code>{ int result; result = 1; ContractsRuntime.Ensures(result == 1<span class="irrelevant">, "result == 1"</span>); return result; }</code></li>
         </ul>
     </section>
-    <section data-title="Contract rewriter - transformations cont.">
+    <section data-title="Contract rewriter - transformations">
         <ul>
             <li>Contract.ValueAtReturn is also moved with enclosing Ensures, and replaced by its parameter
                 <code>{ Contract.Ensures(Contract.ValueAtReturn&lt;int&gt;(this.hp > 0)) return 1; }</code>
@@ -344,7 +344,7 @@ public void Bar() { this.hp = 0; }</code>
 public void Bar() { this.hp = 0; Foo(); }</code></li>
         </ul>
     </section>
-    <section data-title="Contract rewriter - transformations cont.">
+    <section data-title="Contract rewriter - transformations">
         <ul>
             <li>ContractClassFor attribute causes all method bodies in type marked with it to be prepended to counterparts in all implementations of given interface
                 <code>[ContractClassFor(typeof(IFoo))] 
@@ -395,7 +395,7 @@ void Bar() { ContractsRuntime.Ensures(true<span class="irrelevant">, "true"</spa
     }
 }</code>
     </section>
-    <section data-title=".NET Core toolset with Roslyn - PoC cont.">
+    <section data-title=".NET Core toolset with Roslyn - PoC">
         <a href="https://github.com/dotnet/roslyn/wiki/Getting-Started-C%23-Syntax-Transformation" data-footnote="github.com/dotnet/roslyn/wiki/Getting Started C# Syntax Transformation">Roslyn (Microsoft.CodeAnalysis.CSharp) allows transformations of textual C# source code</a>:
         <code>partial class ContractRewriter : CSharpSyntaxRewriter
 {

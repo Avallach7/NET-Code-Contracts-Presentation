@@ -136,7 +136,7 @@ section[data-title].title:before {
 section:empty,
 section.title,
 section.full-background {
-    background: var(--background-color) url('cc-logo-blur.svg');
+    background: var(--background-color) url('cc-logo.svg');
 }
 
 section {

@@ -58,6 +58,49 @@ document.app = {
         document.head.appendChild(style);
     },
 
+
+    switchToDarkStyle: function () {
+        if (document.app.parameters.indexOf("dark") >= 0) {
+            var style = document.createElement('style');
+            style.textContent = `
+                body {
+                    --background-color: black;
+                    --content-color: white;
+                }
+
+                section[data-title]:before, section h1,
+                section:empty::before, .shout {
+                    background: transparent;
+                    color: var(--content-color);
+                    font-family: inherit;
+                    font-weight: 100;
+                    font-size: 3em;
+                }
+
+                section:empty,
+                section.title,
+                section.full-background {
+                    background: var(--background-color) url('template/cc-logo.svg');
+                }
+
+                section {
+                    background: var(--background-color) url('template/cc-logo-blur-2.svg');
+                }
+
+
+                section code {
+                    border: none;
+                    padding: 1em 0;
+                    background: transparent;
+                }`;
+            document.head.appendChild(style);
+            Array.prototype.slice.call(document.getElementsByTagName("img")).forEach(function (img) {
+                if (!img.classList.contains("preserve-colors"))
+                    img.style.filter = "invert(100%)";
+            });
+        }
+    },
+
     addFootnotes: function () {
         document.app.slides.forEach(function (slide) {
             var footnotes = document.createElement("footer");
@@ -188,6 +231,7 @@ document.app = {
         document.app.setupDebugging();
         document.app.switcher.init();
         document.app.initProgressbar();
+        document.app.switchToDarkStyle();
     }
 }
 
