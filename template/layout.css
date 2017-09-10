@@ -190,6 +190,7 @@ ul {
 
 section.content-nextto-illustration>*:nth-child(1) {
     display: inline-block;
+    max-width: 40em;
 }
 
 section.content-nextto-illustration>*:nth-child(2) {

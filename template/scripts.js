@@ -21,8 +21,9 @@ document.app = {
             }
             var list = document.createElement("ol");
             agenda.appendChild(list);
+            var indexOfAgenda = document.app.slides.indexOf(agenda);
             [].forEach.call(document.app.slides, function (slide, index) {
-                if (slide.classList.contains("agenda") ||
+                if (index <= indexOfAgenda ||
                     slide.classList.contains("title") ||
                     slide.childElementCount == 0)
                     return;
