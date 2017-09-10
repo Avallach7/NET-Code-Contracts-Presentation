@@ -1,21 +1,24 @@
 @font-face {
-  font-family: 'Open Sans';
-  font-weight: 300;
-  src: url(OpenSans-Light.woff) format('woff');
+    font-family: 'Open Sans';
+    font-weight: 300;
+    src: url(OpenSans-Light.woff) format('woff');
 }
+
 @font-face {
-  font-family: 'Open Sans';
-  font-weight: 800;
-  src: url(OpenSans-ExtraBold.woff) format('woff');
+    font-family: 'Open Sans';
+    font-weight: 800;
+    src: url(OpenSans-ExtraBold.woff) format('woff');
 }
+
 @font-face {
-	font-family: 'Roboto Slab';
-	src: url('RobotoSlab-Bold.woff') format('woff');
+    font-family: 'Roboto Slab';
+    src: url('RobotoSlab-Bold.woff') format('woff');
     font-weight: bold;
 }
+
 @font-face {
-	font-family: 'Overpass Mono';
-	src: url('OverpassMono-Light.woff') format('woff');
+    font-family: 'Overpass Mono';
+    src: url('OverpassMono-Light.woff') format('woff');
     font-weight: light;
 }
 
@@ -29,13 +32,15 @@ body {
 a {
     color: inherit;
     text-decoration: none;
+    cursor: pointer;
 }
 
 ul {
     list-style-type: square;
 }
 
-li, td {
+li,
+td {
     padding-bottom: 1em;
     line-height: 1.7em;
 }
@@ -65,10 +70,12 @@ section code {
     line-height: 1.5em;
 }
 
+
 /*section code .hljs-keyword, */
-section code .hljs-attribute, 
-section code .hljs-selector-tag, 
-section code .hljs-meta-keyword, 
+
+section code .hljs-attribute,
+section code .hljs-selector-tag,
+section code .hljs-meta-keyword,
 section code .hljs-doctag,
 section code .hljs-name {
     font-weight: 100;
@@ -78,20 +85,18 @@ section code strong,
 section code .hljs-comment,
 section code .hljs-keyword,
 section code .hljs-title,
-section code .hljs-string, 
+section code .hljs-string,
 section code .hljs-number,
 section code .hljs-literal,
-section code .hljs-meta
-{
+section code .hljs-meta {
     font-weight: 800;
 }
 
-section code .hljs-keyword
-{
-/*    color: #0000ff;*/
+section code .hljs-keyword {
+    /*    color: #0000ff;*/
 }
 
-section code .hljs-string, 
+section code .hljs-string,
 section code .hljs-number,
 section code .hljs-literal {
     color: #a31515;
@@ -123,16 +128,19 @@ section h1 {
 
 section[data-title]:empty:before,
 section[data-title].title:before {
-    font-size: 3em;
+    font-size: 4em;
+    line-height: 1.2em;
+    padding: 0.1em 0.2em;
 }
 
 section:empty,
-section.title {
-    background: var(--background-color) url('cc-logo.svg');
+section.title,
+section.full-background {
+    background: var(--background-color) url('cc-logo-blur.svg');
 }
 
 section {
-    background: var(--background-color) url('cc-logo-2.svg');
+    background: var(--background-color) url('cc-logo-blur-2.svg');
 }
 
 section[data-footer]:after {
@@ -153,7 +161,7 @@ section *[data-footnote]:after {
 }
 
 .irrelevant,
-.irrelevant *{
+.irrelevant * {
     font-weight: 100 !important;
 }
 
@@ -174,4 +182,25 @@ section *[data-footnote]:after {
 .progressbar path {
     stroke: rgb(0, 0, 0);
     stroke-width: 6px;
+}
+
+section:empty::before,
+.shout {
+    background: var(--content-color);
+    color: var(--background-color);
+    font-family: 'Roboto Slab';
+    font-weight: 800;
+    font-size: 4em;
+    display: inline-block;
+    margin: 0 auto;
+    line-height: 1.3em;
+    padding: 0 0.2em;
+    position: relative;
+    top: calc(50% - 1em);
+}
+
+section.agenda ol {
+    height: 21em;
+    font-size: 1.3em;
+    line-height: 2.8em;
 }

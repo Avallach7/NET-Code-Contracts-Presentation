@@ -1,0 +1,19 @@
+<svg width="497" height="160" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="162" width="499" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <rect id="svg_1" height="71" width="71" y="1" x="0" stroke-width="0" stroke="#000" fill="#f44f21"/>
+  <rect id="svg_2" height="71" width="71" y="1" x="84.72308" stroke-width="0" stroke="#000" fill="#7fb902"/>
+  <rect id="svg_3" height="71" width="71" y="86.77866" x="0" stroke-width="0" stroke="#000" fill="#03a5f0"/>
+  <rect id="svg_4" height="71" width="71" y="86.77866" x="84.72308" stroke-width="0" stroke="#000" fill="#ffb903"/>
+  <text stroke="#747474" transform="matrix(2.526291570352327,0,0,2.526291570352327,-241.38745197003283,-10.944664563684178) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="29" id="svg_5" y="29.37895" x="167.45934" stroke-width="0" fill="#747474">Microsoft</text>
+  <text stroke="#747474" transform="matrix(2.526291570352327,0,0,2.526291570352327,-241.38745197003283,-10.944664563684178) " xml:space="preserve" text-anchor="start" font-family="Oswald, sans-serif" font-size="29" id="svg_7" y="62.8835" x="167.45934" stroke-width="0" fill="#747474">Research</text>
+ </g>
+</svg>

@@ -30,6 +30,7 @@ section {
     text-align: left;
     position: relative;
     margin: 0 auto;
+    margin-bottom: 100vh;
 }
 
 section::after {
@@ -38,7 +39,6 @@ section::after {
     bottom: var(--vertical-padding);
     content: counter(slide);
 }
-
 
 section:empty::after,
 section:first-of-type::after,
@@ -57,7 +57,7 @@ section h1 {
 }
 
 section>*:first-child {
-/*    padding-top: 0;*/
+    /*    padding-top: 0;*/
     margin-top: 0;
 }
 
@@ -99,7 +99,7 @@ section .footnotes {
     bottom: var(--vertical-padding);
 }
 
-section .footnotes > * {
+section .footnotes>* {
     display: list-item;
 }
 
@@ -133,8 +133,8 @@ section.agenda ol {
     height: 24em;
 }
 
-section ol > *, 
-section ul > * {
+section ol>*,
+section ul>* {
     display: list-item;
 }
 
@@ -172,7 +172,6 @@ ul {
     background: transparent;
 }
 
-
 .progressbar {
     display: block;
     width: 1.7em;
@@ -187,4 +186,15 @@ ul {
     fill-opacity: 0;
     stroke-dasharray: 300;
     stroke-dashoffset: calc(var(--progress) * -300);
+}
+
+section.content-nextto-illustration>*:nth-child(1) {
+    display: inline-block;
+}
+
+section.content-nextto-illustration>*:nth-child(2) {
+    float: right;
+    display: inline-block;
+    width: 11em;
+    vertical-align: top;
 }

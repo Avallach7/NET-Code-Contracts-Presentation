@@ -1,19 +1,19 @@
 document.app = {
     debug: false,
     parameters: [],
-    
-    log: function(message) {
+
+    log: function (message) {
         if (document.app.debug)
             console.log(message);
     },
-    
-    createAgenda: function() {
+
+    createAgenda: function () {
         [].forEach.call(document.getElementsByClassName("agenda"), function (agenda) {
             function getTitle(slideIndex) {
                 var slide = document.app.slides[slideIndex];
-                if (slide.dataset.title != undefined && 
+                if (slide.dataset.title != undefined &&
                     !slide.dataset.title.endsWith(" cont.") &&
-                    !(slideIndex>0 && slide.dataset.title == document.app.slides[slideIndex-1].dataset.title))
+                    !(slideIndex > 0 && slide.dataset.title == document.app.slides[slideIndex - 1].dataset.title))
                     return (slideIndex + 1) + ". " + slide.dataset.title;
                 else {
                     return undefined;
@@ -37,8 +37,10 @@ document.app = {
         });
     },
 
-    initCodeHighlighting: function() {
-        hljs.configure({ languages: [ "csharp "] });
+    initCodeHighlighting: function () {
+        hljs.configure({
+            languages: ["csharp "]
+        });
         if (document.location.host.startsWith("127.0.0.1"))
             return;
         var codes = document.getElementsByTagName("code");
@@ -49,28 +51,29 @@ document.app = {
         }
     },
 
-    addTotalNumberOfSlidesToCounter: function() {
+    addTotalNumberOfSlidesToCounter: function () {
         var style = document.createElement('style');
         style.textContent = `section::after { content: counter(slide) "/${document.app.slides.length}"; }`;
         document.head.appendChild(style);
     },
 
-    addFootnotes: function() {
-        document.app.slides.forEach(function(slide) {
+    addFootnotes: function () {
+        document.app.slides.forEach(function (slide) {
             var footnotes = document.createElement("footer");
             footnotes.classList.add("footnotes");
-            Array.prototype.slice.call(slide.querySelectorAll("*[data-footnote]")).forEach(function(hyperlink) {
+            Array.prototype.slice.call(slide.querySelectorAll("*[data-footnote]")).forEach(function (hyperlink) {
                 var footnote = document.createElement("a");
                 footnote.href = hyperlink.href;
                 footnote.textContent = hyperlink.dataset.footnote;
                 footnotes.appendChild(footnote);
             });
-            slide.appendChild(footnotes);
+            if (footnotes.childElementCount > 0)
+                slide.appendChild(footnotes);
         });
     },
 
-    loadParameters: function() {
-        document.location.search.substr(1).split("&").forEach(function(param) {
+    loadParameters: function () {
+        document.location.search.substr(1).split("&").forEach(function (param) {
             if (param.length > 0) {
                 document.app.parameters.push(param);
                 document.body.classList.add(param);
@@ -78,7 +81,7 @@ document.app = {
         });
     },
 
-    setupDebugging: function() {
+    setupDebugging: function () {
         if (document.app.parameters.indexOf("debug") >= 0) {
             document.app.debug = true;
             var consoleView = document.createElement("div");
@@ -101,10 +104,10 @@ document.app = {
 
     switcher: {
         onswitch: function (id) {},
-        
+
         activeSlideId: 0,
 
-        isScrollingBack: function(event) {
+        isScrollingBack: function (event) {
             var backScrollingKeys = ["ArrowUp", "ArrowLeft", "PageUp"];
             return (event instanceof WheelEvent && event.deltaY < 0) ||
                 (event instanceof KeyboardEvent && backScrollingKeys.indexOf(event.key) >= 0) ||
@@ -113,13 +116,13 @@ document.app = {
                         document.app.switcher.touchStart.x - event.changedTouches[0].clientX < 0));
         },
 
-        setSlide: function(id) {
+        setSlide: function (id) {
             document.app.switcher.activeSlideId = id;
             document.app.slides[id].scrollIntoView(true);
             document.app.switcher.onswitch(id);
         },
 
-        onSlideChange: function(event) {
+        onSlideChange: function (event) {
             document.app.log(`document.app.switcher.onSlideChange(${event.type})`);
             var newSlide = document.app.switcher.activeSlideId + (document.app.switcher.isScrollingBack(event) ? -1 : 1);
             if (newSlide >= document.app.slides.length)
@@ -129,7 +132,7 @@ document.app = {
             document.app.switcher.setSlide(newSlide);
         },
 
-        init: function() {
+        init: function () {
             document.body.addEventListener("click", document.app.switcher.onSlideChange);
             document.body.addEventListener("wheel", document.app.switcher.onSlideChange);
             document.body.addEventListener("keydown", document.app.switcher.onSlideChange);
@@ -142,15 +145,15 @@ document.app = {
             document.body.addEventListener("touchend", document.app.switcher.onSlideChange);
         }
     },
-    
+
     progressbar: undefined,
-    
+
     timeLengthMinutes: 30,
     startTime: undefined,
-    
-    initProgressbar: function() {
+
+    initProgressbar: function () {
         if (document.app.parameters.indexOf("progress") > -1) {
-            document.app.slides.forEach(function(slide) {
+            document.app.slides.forEach(function (slide) {
                 // var svgNS = "http://www.w3.org/2000/svg";
                 // var progressbar = document.createElementNS(svgNS, "svg");
                 // progressbar.classList.add("progressbar");
@@ -162,7 +165,7 @@ document.app = {
                 slide.innerHTML += '<svg class="progressbar" viewBox="0 0 100 100"><path></path></svg>';
             });
             document.app.startTime = new Date().getTime();
-            var loop = setInterval(function() {
+            var loop = setInterval(function () {
                 var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
                 var progress = minutesElapsed / document.app.timeLengthMinutes;
                 if (progress >= 1) {
@@ -174,7 +177,7 @@ document.app = {
         }
     },
 
-    init: function() {
+    init: function () {
         document.app.slides = Array.prototype.slice.call(document.getElementsByTagName("section"));
         document.app.createAgenda();
         document.app.initCodeHighlighting();
