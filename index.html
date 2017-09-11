@@ -337,7 +337,7 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
     <section data-title="Contract rewriter - transformations">
         <ul>
             <li>Contract.ValueAtReturn is also moved with enclosing Ensures, and replaced by its parameter
-                <code>{ Contract.Ensures(Contract.ValueAtReturn&lt;int&gt;(this.hp > 0)) return 1; }</code>
+                <code>{ Contract.Ensures(Contract.ValueAtReturn&lt;int&gt;(this.hp) > 0); return 1; }</code>
                 <code>{ int result; result = 1; ContractsRuntime.Ensures(this.hp > 0<span class="irrelevant">, "this.hp > 0"</span>); return result; }</code></li>
             <li>Contract.Invariant is checked at the end of each public method
                 <code>[ContractInvariantMethod] 

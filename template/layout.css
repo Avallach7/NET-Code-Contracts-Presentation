@@ -106,7 +106,7 @@ section .footnotes>*:before {
 
 @media print {
     body {
-        background: black !important;
+        background: white !important;
     }
     section {
         background: var(--background-color) url('template/bg.svg');
