@@ -176,6 +176,7 @@ document.app = {
             document.app.switcher.activeSlideId = id;
             document.app.slides[id].scrollIntoView(true);
             document.app.switcher.onswitch(id);
+            document.app.updateProgressbar();
         },
 
         onSlideChange: function (event) {
@@ -204,7 +205,7 @@ document.app = {
 
     progressbar: undefined,
 
-    timeLengthMinutes: 5,
+    timeLengthMinutes: 30,
     startTime: undefined,
 
     initProgressbar: function () {
@@ -221,29 +222,27 @@ document.app = {
                 slide.innerHTML += '<svg class="progressbar" viewBox="0 0 100 100"><path></path></svg>';
             });
             document.app.startTime = new Date().getTime();
-            function setProgressColor() {
-                var slideCount = document.app.slides.length;
-                var slideProgress = document.app.switcher.activeSlideId / slideCount;
-                var progressColor;
-                if (slideProgress < document.app.progress - (1/slideCount))
-                    progressColor = "blue";
-                else if (slideProgress > document.app.progress + (1/slideCount))
-                    progressColor = "red";
-                else
-                    progressColor = "rgb(128,128,128)";
-                document.body.style.setProperty("--progress-color", progressColor);
-            }
-            var loop = setInterval(function () {
+            document.app.updateProgressbar = function () {
                 var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
                 var progress = minutesElapsed / document.app.timeLengthMinutes;
-                document.app.progress = progress;
                 if (progress >= 1) {
                     progress = 1;
                     clearInterval(loop);
                 }
                 document.body.style.setProperty("--progress", progress);
-                setProgressColor();
-            },  1000);
+                
+                var slideCount = document.app.slides.length;
+                var slideProgress = document.app.switcher.activeSlideId / slideCount;
+                var progressColor;
+                if (slideProgress < progress - (1/slideCount))
+                    progressColor = "blue";
+                else if (slideProgress > progress + (1/slideCount))
+                    progressColor = "red";
+                else
+                    progressColor = "rgb(128,128,128)";
+                document.body.style.setProperty("--progress-color", progressColor);
+            }
+            var loop = setInterval(document.app.updateProgressbar, 60*1000);
         }
     },
     
