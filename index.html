@@ -19,11 +19,13 @@
         <!--        <a href="https://avallach.ovh/contracts" style="position: absolute; left: 3em; top: 18em;">avallach.ovh/contracts</a>-->
     </section>
     <section data-title="Slides on your phone">
-        <span style="display: block; margin: 0 auto; width: 10em; font-size: 2.0em; margin-bottom: 1em">avallach.ovh/contracts</span>
-        <img src="template/qr-code.svg" class="preserve-colors" style="display: block; margin: 0 auto; height: 20em; border: 1em solid white;">
+        <span style="display: block; margin: 0 auto; width: 10em; font-size: 2.0em; margin-bottom: 0.5em">avallach.ovh/contracts</span>
+        <img src="template/qr-code.svg" class="preserve-colors" style="display: block; margin: 0 auto; height: 18em; border: 1em solid rgba(255, 255, 255, 0.3);">
     </section>
     <section data-title="Agenda" class="agenda"></section>
-    <section data-title="Unit tests are not enough"></section>
+    <section class="full-background">
+        <span class="shout">Unit tests are not enough</span>
+    </section>
     <section data-title="Example code - interface and tests">
         You need to implement/understand/debug some interface, but cannot guess from names what it should really do:
         <code style="font-size: 1em;">public interface IFibonacci
@@ -63,7 +65,7 @@ abstract class FibonacciContract : IFibonacci
 		Requires(n &gt;= 0);
         Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));<span class="irrelevant">
         Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);</span>
-        Ensures(<span class="irrelevant">n &lt; 2 || </span>Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        Ensures(<span class="irrelevant">n &lt; 2 || </span>Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span>+1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m))==n);<span class="irrelevant">
         return default(int);</span>
 	}
 
@@ -87,7 +89,7 @@ abstract class FibonacciContract : IFibonacci
 		Requires(n &gt;= 0);
         Ensures(<span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(Result<span class="irrelevant">&lt;int&gt;()</span>));<span class="irrelevant">
         Ensures(n &gt; 1 || Result<span class="irrelevant">&lt;int&gt;()</span> == n);</span>
-        Ensures(<span class="irrelevant">n &lt; 2 || </span>Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span> + 1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m)) == n);<span class="irrelevant">
+        Ensures(<span class="irrelevant">n &lt; 2 || </span>Enumerable.Range(0, Result<span class="irrelevant">&lt;int&gt;()</span>+1).Count(m =&gt; <span class="irrelevant">((IFibonacci)this).</span>IsFibonacci(m))==n);<span class="irrelevant">
         return default(int);</span>
 	}
 
@@ -185,7 +187,9 @@ abstract class FibonacciContract : IFibonacci
             </tr>
         </table>
     </section>
-    <section data-title="Right tools are already there"></section>
+    <section class="full-background">
+        <span class="shout">Right tools are already there</span>
+    </section>
     <section data-title="History - Microsoft and beyond">
         <ul>
             <li>Developed in 2008 at <a href="https://www.microsoft.com/en-us/research/group/research-in-software-engineering-rise/" data-footnote="microsoft.com/.../research-in-software-engineering-rise">Software Engineering division of Microsoft Research (RiSE)</a></li>
@@ -266,7 +270,7 @@ void Ensures(bool condition, string userMessage) {...}</code></li>
 Contract.Requires(<strong>Contract.ForAll&lt;int&gt;(inputs, i => i > 0)</strong>);</code></li>
             <li>"Hacking" Contract methods to run <strong>without rewriter</strong> can have unexpected results
                 <code>bool inputsValid <strong>= Contract.ForAll&lt;int&gt;</strong>(inputs, i => i == i);
-#define CONTRACTS_FULL //bad idea
+#define CONTRACTS_FULL
 return Contract.Result&lt;Paradox&gt;();</code></li>
         </ul>
     </section>
@@ -337,10 +341,8 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
             <li>Contract.Invariant is checked at the end of each public method
                 <code>[ContractInvariantMethod] 
 void Foo(){ Contract.Invariant(true); } 
-
 public void Bar() { this.hp = 0; }</code>
                 <code>void Foo(){ ContractsRuntime.Invariant(true<span class="irrelevant">, "true"</span>); } 
-
 public void Bar() { this.hp = 0; Foo(); }</code></li>
         </ul>
     </section>

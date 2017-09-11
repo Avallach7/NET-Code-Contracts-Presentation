@@ -136,11 +136,11 @@ section[data-title].title:before {
 section:empty,
 section.title,
 section.full-background {
-    background: var(--background-color) url('cc-logo.svg');
+    background: var(--background-color) url('background-title.svg');
 }
 
 section {
-    background: var(--background-color) url('cc-logo-blur-2.svg');
+    background: var(--background-color) url('background.svg');
 }
 
 section[data-footer]:after {

@@ -75,23 +75,47 @@ document.app = {
                     font-family: inherit;
                     font-weight: 100;
                     font-size: 3em;
+                    padding-left: 0;
                 }
-
-                section:empty,
-                section.title,
-                section.full-background {
-                    background: var(--background-color) url('template/cc-logo.svg');
-                }
-
-                section {
-                    background: var(--background-color) url('template/cc-logo-blur-2.svg');
-                }
-
 
                 section code {
                     border: none;
                     padding: 1em 0;
                     background: transparent;
+                }
+
+                section code .hljs-meta {
+                    color: #a16fff;
+                }
+
+                section code .hljs-title {
+                    color: #2b92ff;
+                }
+
+                section code .hljs-comment {
+                    color: #58ff58;
+                }
+
+                section code .hljs-string, 
+                section code .hljs-number, 
+                section code .hljs-literal {
+                    color: #ff5a5a;
+                }
+
+                section code ~ code {
+                    border-top: 1px solid rgba(255, 255, 255, 0.5);
+                }
+
+                .progressbar path {
+                    stroke: rgb(128, 128, 128);
+                }
+            
+                .progressbar {
+                    opacity: 1;
+                }
+
+                .shout {
+                    font-size: 4em;
                 }`;
             document.head.appendChild(style);
             Array.prototype.slice.call(document.getElementsByTagName("img")).forEach(function (img) {
