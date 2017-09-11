@@ -60,7 +60,7 @@ document.app = {
 
 
     switchToDarkStyle: function () {
-        if (document.app.parameters.indexOf("dark") >= 0) {
+        if (document.app.parameters.indexOf("light") < 0) {
             var style = document.createElement('style');
             style.textContent = `
                 body {
