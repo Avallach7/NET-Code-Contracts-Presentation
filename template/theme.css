@@ -178,7 +178,7 @@ section *[data-footnote]:after {
 }
 
 .progressbar path {
-    stroke: rgb(128, 128, 128);
+    stroke: var(--progress-color);
     stroke-width: 6px;
 }
 

@@ -204,7 +204,7 @@ document.app = {
 
     progressbar: undefined,
 
-    timeLengthMinutes: 30,
+    timeLengthMinutes: 5,
     startTime: undefined,
 
     initProgressbar: function () {
@@ -221,16 +221,46 @@ document.app = {
                 slide.innerHTML += '<svg class="progressbar" viewBox="0 0 100 100"><path></path></svg>';
             });
             document.app.startTime = new Date().getTime();
+            function setProgressColor() {
+                var slideCount = document.app.slides.length;
+                var slideProgress = document.app.switcher.activeSlideId / slideCount;
+                var progressColor;
+                if (slideProgress < document.app.progress - (1/slideCount))
+                    progressColor = "blue";
+                else if (slideProgress > document.app.progress + (1/slideCount))
+                    progressColor = "red";
+                else
+                    progressColor = "rgb(128,128,128)";
+                document.body.style.setProperty("--progress-color", progressColor);
+            }
             var loop = setInterval(function () {
                 var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
                 var progress = minutesElapsed / document.app.timeLengthMinutes;
+                document.app.progress = progress;
                 if (progress >= 1) {
                     progress = 1;
                     clearInterval(loop);
                 }
                 document.body.style.setProperty("--progress", progress);
-            }, 60 * 1000);
+                setProgressColor();
+            },  1000);
         }
+    },
+    
+    turnBgOn: function() {
+        if (document.app.parameters.indexOf("image-bg") < 0)
+            return;
+        var style = document.createElement('style');
+        style.textContent = `
+            body {
+                background: url(https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-507918.jpg);
+                background-size: 100vw 100vh;
+                background-attachment: fixed;
+            }
+            section {
+                background: transparent !important;
+            }`;
+        document.head.appendChild(style);
     },
 
     init: function () {
@@ -244,6 +274,7 @@ document.app = {
         document.app.switcher.init();
         document.app.initProgressbar();
         document.app.switchToDarkStyle();
+        document.app.turnBgOn();
     }
 }
 
