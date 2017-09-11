@@ -65,11 +65,13 @@ section code {
     font-family: 'Overpass Mono', monospace;
     font-weight: 100;
     font-size: 0.8em;
-    background: var(--background-color);
-    border: 1px dashed var(--content-color);
     line-height: 1.5em;
+    padding: 1em 0;
 }
 
+section code ~ code {
+    border-top: 1px solid rgba(128, 128, 128, 1);
+}
 
 /*section code .hljs-keyword, */
 
@@ -175,12 +177,8 @@ section *[data-footnote]:after {
     content: attr(data-replacement);
 }
 
-.progressbar {
-    opacity: 0.2;
-}
-
 .progressbar path {
-    stroke: rgb(0, 0, 0);
+    stroke: rgb(128, 128, 128);
     stroke-width: 6px;
 }
 

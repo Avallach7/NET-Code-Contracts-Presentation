@@ -102,18 +102,6 @@ document.app = {
                     color: #ff5a5a;
                 }
 
-                section code ~ code {
-                    border-top: 1px solid rgba(255, 255, 255, 0.5);
-                }
-
-                .progressbar path {
-                    stroke: rgb(128, 128, 128);
-                }
-            
-                .progressbar {
-                    opacity: 1;
-                }
-
                 .shout {
                     font-size: 4em;
                 }`;
@@ -241,7 +229,7 @@ document.app = {
                     clearInterval(loop);
                 }
                 document.body.style.setProperty("--progress", progress);
-            }, 1000);
+            }, 60 * 1000);
         }
     },
 
