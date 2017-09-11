@@ -40,12 +40,8 @@ section::after {
     content: counter(slide);
 }
 
-section:empty::after,
 section:first-of-type::after,
-section.agenda::after,
-section:empty .progressbar,
-section:first-of-type .progressbar,
-section.agenda .progressbar {
+section:first-of-type .progressbar {
     display: none;
 }
 
