@@ -249,7 +249,7 @@ document.app = {
                 else if (slideProgress > progress + (1/slideCount))
                     progressColor = "red";
                 else
-                    progressColor = "rgb(128,128,128)";
+                    progressColor = "rgba(128,128,128, 0.2)";
                 document.body.style.setProperty("--progress-color", progressColor);
             }
             var loop = setInterval(document.app.updateProgressbar, 60*1000);
