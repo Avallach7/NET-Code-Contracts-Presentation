@@ -64,7 +64,7 @@ document.app = {
             var style = document.createElement('style');
             style.textContent = `
                 body {
-                    --background-color: black;
+                    --background-color: #151515;
                     --content-color: white;
                 }
 
@@ -76,6 +76,16 @@ document.app = {
                     font-weight: 100;
                     font-size: 3em;
                     padding-left: 0;
+                }
+
+                section { 
+                    background: transparent;
+                }
+
+                section:empty,
+                section.title,
+                section.full-background {
+                    background: var(--background-color) url('images/background-blurred.svg');
                 }
 
                 section code {
