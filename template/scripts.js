@@ -178,7 +178,7 @@ document.app = {
             return (event instanceof WheelEvent && event.deltaY < 0) ||
                 (event instanceof KeyboardEvent && backScrollingKeys.indexOf(event.key) >= 0) ||
                 (event instanceof TouchEvent &&
-                    (document.app.switcher.touchStart.y - event.changedTouches[0].clientY > 0 ||
+                    (event.changedTouches[0].clientY - document.app.switcher.touchStart.y > 0 ||
                         document.app.switcher.touchStart.x - event.changedTouches[0].clientX < 0));
         },
 
