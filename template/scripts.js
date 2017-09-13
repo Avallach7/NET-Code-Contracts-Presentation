@@ -169,7 +169,7 @@ document.app = {
     },
 
     switcher: {
-        onswitch: function (id) {},
+        onswitch: [],
 
         activeSlideId: 0,
 
@@ -185,8 +185,7 @@ document.app = {
         setSlide: function (id) {
             document.app.switcher.activeSlideId = id;
             document.app.slides[id].scrollIntoView(true);
-            document.app.switcher.onswitch(id);
-            document.app.updateProgressbar();
+            document.app.switcher.onswitch.forEach(function(handler) { handler(id); });
         },
 
         onSlideChange: function (event) {
@@ -253,6 +252,7 @@ document.app = {
                 document.body.style.setProperty("--progress-color", progressColor);
             }
             var loop = setInterval(document.app.updateProgressbar, 60*1000);
+            document.app.switcher.onswitch.push(document.app.updateProgressbar);
         }
     },
     

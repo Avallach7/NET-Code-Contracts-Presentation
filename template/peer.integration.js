@@ -28,13 +28,13 @@ document.app.peerjs = {
             });
         });
 
-        document.app.switcher.onswitch = function(id) {
-            document.app.log(`document.app.switcher.onswitch(${id})`);
+        document.app.switcher.onswitch.push(function(id) {
+            document.app.log(`document.app.switcher.onswitch(document.app.peerjs, ${id})`);
             document.app.peerjs.peerConnections.forEach(function (connection) {
                 document.app.log(`document.app.peerjs.peerConnections[${connection.peer}].send(${document.app.switcher.activeSlideId})`);
                 connection.send(id);
             });
-        };
+        });
     },
     
     setupPeer: function() {

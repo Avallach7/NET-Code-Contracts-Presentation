@@ -16,11 +16,10 @@
 
 <body>
     <section data-title=".NET Code Contracts" data-footer="Adam.Golebiowski @ NewVoiceMedia.com" class="title">
-        <!--        <a href="https://avallach.ovh/contracts" style="position: absolute; left: 3em; top: 18em;">avallach.ovh/contracts</a>-->
-        <a href="index.html?dark&progress&hideIrrelevant&server" style="opacity: 0.3">+</a>
+        <a id="mode-switch" href="index.html?progress&hideIrrelevant&server" style="opacity: 0.1; position: absolute; bottom: 1.3em; left: 11em; z-index: 666;">@</a>
+        <script>if (new Date().getDate() != 23) document.getElementById("mode-switch").remove();</script>
     </section>
     <section data-title="Slides online: avallach.ovh/contracts">
-<!--        <span style="display: block; margin: 0 auto; width: 10em; font-size: 2.0em; margin-bottom: 0.5em">avallach.ovh/contracts</span>-->
         <img src="images/qr-code.svg" class="preserve-colors" style="display: block; margin: 0 auto; height: 23em; border: 1em solid rgba(255, 255, 255, 0.3);">
     </section>
     <section data-title="Agenda" class="agenda"></section>
@@ -198,11 +197,7 @@ abstract class FibonacciContract : IFibonacci
             <li>Released commercially at first</li>
             <li>Later open sourced (MIT License) and <a href="https://github.com/Microsoft/CodeContracts" data-footnote="github.com/Microsoft/CodeContracts">published on GitHub</a></li>
             <li><a href="http://referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs" data-footnote="referencesource.microsoft.com/#mscorlib/system/diagnostics/contracts/contracts.cs">Added to Base Class Library</a>, used internally in <a href="http://referencesource.microsoft.com/#mscorlib/system/array.cs,2904" data-footnote="referencesource.microsoft.com/#mscorlib/system/array.cs">.NET Framework</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Array.cs#L52" data-footnote="dotnet/coreclr/.../mscorlib/src/System/Array.cs">Core</a></li>
-            <!--            <li><a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET" data-footnote="marketplace.visualstudio.com/.../CodeContractsforNET">RiSE toolset supports only full .NET Framework and Visual Studio 2015 and below</a></li>-->
-            <!--            <li>Source code repository contains implementation of <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/Contracts.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/Contracts.cs">Contracts class</a> and <a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/src/System/Diagnostics/Contracts/ContractsBCL.cs" data-footnote="github.com/dotnet/coreclr/.../System/Diagnostics/Contracts/ContractsBCL.cs">failure handling code for runtime checking</a></li>-->
-            <!--            <li>This code can only be used internally by framework, and for applications stub is exposed trough package <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs" data-footnote="github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs">System.Diagnostics.Contracts</a> instead</li>-->
             <li><a href="https://github.com/Microsoft/CodeContracts/issues/409" data-footnote="github.com/Microsoft/CodeContracts/issues/409">Microsoft is not working on .NET Core compatible toolset</a></li>
-            <!--            <li><a href="https://github.com/dotnet/roslyn" data-footnote="github.com/dotnet/roslyn">Microsoft.CodeAnalysis (aka Roslyn)</a> or <a href="https://github.com/Fody/Fody" data-footnote="github.com/Fody/Fody">Fody</a> may help with modern re-implementation</li>-->
         </ul>
         <img src="images/microsoft-research.svg" style="float: right; width: 20em" class="preserve-colors">
     </section>
@@ -213,19 +208,16 @@ abstract class FibonacciContract : IFibonacci
                     <li>Documentation generator, binary rewriter, static and runtime checker</li>
                     <li>Visual Studio extension: <a href="https://marketplace.visualstudio.com/items?itemName=RiSEResearchinSoftwareEngineering.CodeContractsforNET">RiSEResearchinSoftwareEngineering.CodeContractsforNET</a></li>
                     <li>Incompatible with .NET Core and VS2017+</li>
-                    <!--					<li>Source: <a href="https://github.com/Microsoft/CodeContracts">github.com/Microsoft/CodeContracts</a></li>-->
                 </ul>
             </li>
             <li><strong><a href="https://www.nuget.org/packages/System.Diagnostics.Contracts/" data-footnote="nuget.org/packages/System.Diagnostics.Contracts">System.Diagnostics.Contracts</a></strong>
                 <ul>
                     <li>Just stubbed interface</li>
                     <li>.NET Core compatible</li>
-                    <!--					<li>Source: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.Contracts/ref/System.Diagnostics.Contracts.cs">github.com/dotnet/corefx/.../System.Diagnostics.Contracts.cs</a></li>-->
                 </ul>
             </li>
             <li><strong>DotNet.Core.Contracts</strong>
                 <ul>
-                    <!--					<li>.NET Core compatible</li>-->
                     <li>Interface, rewriter, and runtime checker</li>
                     <li>Does not exist yet, can be developed by community with Roslyn or Fody</li>
                 </ul>
@@ -309,19 +301,12 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
             height: 8em;
         ">
         <ul>
-            <!--TODO: symbolical diagrams representing those, text left as a comment-->
             <li>Contract.Requires is simply transformed to ContractsRuntime.Requires
                 <code>{ Contract.Requires(true); }</code>
                 <code>{ ContractsRuntime.Requires(true<span class="irrelevant">, "true"</span>); }</code></li>
             <li>Contract.EnsuresOnThrow&lt;T&gt; wraps method body in try block and is checked in generated catch(T) block
                 <code>{ Contract.EnsuresOnThrow&lt;Exception&gt;(true); return 1; }</code>
                 <code>{ try { return 1; } catch(Exception e) { ContractsRuntime.EnsuresOnThrow(true<span class="irrelevant">, "true", e</span>); } }</code></li>
-            <!--
-			<li>Control flow is modified to use generated helper local variable for storing result and single return statement at the
-				end of method
-                <code>{ if (true) return 1; else return 2; }</code>
-                <code>{ int result; if (true) result = 1; else result = 2; return result; }</code></li>
--->
         </ul>
     </section>
     <section data-title="Contract rewriter - transformations">
