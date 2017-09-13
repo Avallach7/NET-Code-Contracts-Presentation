@@ -1,5 +1,6 @@
 # NET-Code-Contracts-Presentation
 This is presentation about .NET Code Contracts I prepared for one IT conference. 
+Browser view: http://rawgit.com/Avallach7/NET-Code-Contracts-Presentation/master/index.html
 
 # Implementation details
 It's handwritten in HTML+CSS+JS and offers some nice features:
