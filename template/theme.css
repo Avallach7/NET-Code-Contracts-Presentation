@@ -202,3 +202,79 @@ section.agenda ol {
     font-size: 1.3em;
     line-height: 2.8em;
 }
+
+body.presenter-mode {
+    overflow: hidden;
+}
+.presenter-mode section {
+    margin-bottom: 100vh;
+}
+
+body.image-bg {
+    background: var(--background-color) url(../images/background-blurred.svg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+.image-bg section {
+    background: transparent !important;
+}
+
+
+
+
+
+
+body:not(.light) {
+    --background-color: #151515;
+    --content-color: white;
+}
+
+body:not(.light) section[data-title]:before, 
+body:not(.light) section h1,
+body:not(.light) section:empty::before, 
+body:not(.light) .shout {
+    background: transparent;
+    color: var(--content-color);
+    font-family: inherit;
+    font-weight: 100;
+    font-size: 3em;
+    padding-left: 0;
+}
+
+body:not(.light) section { 
+    background: transparent;
+}
+
+body:not(.light) section:empty,
+body:not(.light) section.title,
+body:not(.light) section.full-background {
+    background: var(--background-color) url('../images/background-blurred.svg');
+}
+
+body:not(.light) section code {
+    border: none;
+    padding: 1em 0;
+    background: transparent;
+}
+
+body:not(.light) section code .hljs-meta {
+    color: #a16fff;
+}
+
+body:not(.light) section code .hljs-title {
+    color: #2b92ff;
+}
+
+body:not(.light) section code .hljs-comment {
+    color: #58ff58;
+}
+
+body:not(.light) section code .hljs-string, 
+body:not(.light) section code .hljs-number, 
+body:not(.light) section code .hljs-literal {
+    color: #ff5a5a;
+}
+
+body:not(.light) section .shout {
+    font-size: 4em;
+}

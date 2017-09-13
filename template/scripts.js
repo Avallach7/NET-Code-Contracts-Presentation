@@ -61,61 +61,6 @@ document.app = {
 
     switchToDarkStyle: function () {
         if (document.app.parameters.indexOf("light") < 0) {
-            var style = document.createElement('style');
-            style.textContent = `
-                body {
-                    --background-color: #151515;
-                    --content-color: white;
-                }
-
-                section[data-title]:before, section h1,
-                section:empty::before, .shout {
-                    background: transparent;
-                    color: var(--content-color);
-                    font-family: inherit;
-                    font-weight: 100;
-                    font-size: 3em;
-                    padding-left: 0;
-                }
-
-                section { 
-                    background: transparent;
-                }
-
-                section:empty,
-                section.title,
-                section.full-background {
-                    background: var(--background-color) url('images/background-blurred.svg');
-                }
-
-                section code {
-                    border: none;
-                    padding: 1em 0;
-                    background: transparent;
-                }
-
-                section code .hljs-meta {
-                    color: #a16fff;
-                }
-
-                section code .hljs-title {
-                    color: #2b92ff;
-                }
-
-                section code .hljs-comment {
-                    color: #58ff58;
-                }
-
-                section code .hljs-string, 
-                section code .hljs-number, 
-                section code .hljs-literal {
-                    color: #ff5a5a;
-                }
-
-                .shout {
-                    font-size: 4em;
-                }`;
-            document.head.appendChild(style);
             Array.prototype.slice.call(document.getElementsByTagName("img")).forEach(function (img) {
                 if (!img.classList.contains("preserve-colors"))
                     img.style.filter = "invert(100%)";
@@ -218,58 +163,48 @@ document.app = {
     startTime: undefined,
 
     initProgressbar: function () {
-        if (document.app.parameters.indexOf("progress") > -1) {
-            document.app.slides.forEach(function (slide) {
-                // var svgNS = "http://www.w3.org/2000/svg";
-                // var progressbar = document.createElementNS(svgNS, "svg");
-                // progressbar.classList.add("progressbar");
-                // progressbar.setAttributeNS(svgNS, "viewBox", "0 0 100 100");
-                // var path = document.createElementNS(svgNS, "path");
-                // progressbar.appendChild(path);
-                // slide.appendChild(progressbar);
-                // ABOVE DOES NOT RENDER IN CHROME, UGLY HACK INSTEAD 
-                slide.innerHTML += '<svg class="progressbar" viewBox="0 0 100 100"><path></path></svg>';
-            });
-            document.app.startTime = new Date().getTime();
-            document.app.updateProgressbar = function () {
-                var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
-                var progress = minutesElapsed / document.app.timeLengthMinutes;
-                if (progress >= 1) {
-                    progress = 1;
-                    clearInterval(loop);
-                }
-                document.body.style.setProperty("--progress", progress);
-                
-                var slideCount = document.app.slides.length;
-                var slideProgress = document.app.switcher.activeSlideId / slideCount;
-                var progressColor;
-                if (slideProgress < progress - (1/slideCount))
-                    progressColor = "blue";
-                else if (slideProgress > progress + (1/slideCount))
-                    progressColor = "red";
-                else
-                    progressColor = "rgba(128,128,128, 0.2)";
-                document.body.style.setProperty("--progress-color", progressColor);
+        document.app.slides.forEach(function (slide) {
+            // var svgNS = "http://www.w3.org/2000/svg";
+            // var progressbar = document.createElementNS(svgNS, "svg");
+            // progressbar.classList.add("progressbar");
+            // progressbar.setAttributeNS(svgNS, "viewBox", "0 0 100 100");
+            // var path = document.createElementNS(svgNS, "path");
+            // progressbar.appendChild(path);
+            // slide.appendChild(progressbar);
+            // ABOVE DOES NOT RENDER IN CHROME, UGLY HACK INSTEAD 
+            slide.innerHTML += '<svg class="progressbar" viewBox="0 0 100 100"><path></path></svg>';
+        });
+        document.app.startTime = new Date().getTime();
+        document.app.updateProgressbar = function () {
+            var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
+            var progress = minutesElapsed / document.app.timeLengthMinutes;
+            if (progress >= 1) {
+                progress = 1;
+                clearInterval(loop);
             }
-            var loop = setInterval(document.app.updateProgressbar, 60*1000);
-            document.app.switcher.onswitch.push(document.app.updateProgressbar);
+            document.body.style.setProperty("--progress", progress);
+
+            var slideCount = document.app.slides.length;
+            var slideProgress = document.app.switcher.activeSlideId / slideCount;
+            var progressColor;
+            if (slideProgress < progress - (1/slideCount))
+                progressColor = "blue";
+            else if (slideProgress > progress + (1/slideCount))
+                progressColor = "red";
+            else
+                progressColor = "rgba(128,128,128, 0.2)";
+            document.body.style.setProperty("--progress-color", progressColor);
         }
+        var loop = setInterval(document.app.updateProgressbar, 60*1000);
+        document.app.switcher.onswitch.push(document.app.updateProgressbar);
     },
     
-    turnBgOn: function() {
-        if (document.app.parameters.indexOf("image-bg") < 0)
+    startPresentationMode: function() {
+        if (document.app.parameters.indexOf("presenter-mode") < 0)
             return;
-        var style = document.createElement('style');
-        style.textContent = `
-            body {
-                background: url(https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-507918.jpg);
-                background-size: 100vw 100vh;
-                background-attachment: fixed;
-            }
-            section {
-                background: transparent !important;
-            }`;
-        document.head.appendChild(style);
+        document.app.switcher.init();
+        document.app.initProgressbar();
+        document.body.classList.add("hideIrrelevant");
     },
 
     init: function () {
@@ -280,10 +215,8 @@ document.app = {
         document.app.addFootnotes();
         document.app.loadParameters();
         document.app.setupDebugging();
-        document.app.switcher.init();
-        document.app.initProgressbar();
         document.app.switchToDarkStyle();
-        document.app.turnBgOn();
+        document.app.startPresentationMode();
     }
 }
 

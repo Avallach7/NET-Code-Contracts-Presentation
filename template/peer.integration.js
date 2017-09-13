@@ -59,7 +59,7 @@ document.app.peerjs = {
     },
     
     setup: function() {
-        var isServer = document.location.href.indexOf("server") >= 0;
+        var isServer = document.location.href.indexOf("server") >= 0 || document.app.parameters.indexOf("presenter-mode") >= 0;
         document.app.log(`document.app.peerjs.setup(${isServer ? "server" : "peer"})`);
         if (isServer) {
             document.app.peerjs.setupServer();

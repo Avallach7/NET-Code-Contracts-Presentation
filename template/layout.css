@@ -30,8 +30,7 @@ section {
     text-align: left;
     position: relative;
     margin: 0 auto;
-    margin-bottom: 100vh;
-    background-size: 105%; /*svg bg fix*/
+    background-size: 105% !important; /*svg bg fix*/
 }
 
 section::after {
@@ -158,7 +157,7 @@ section .background {
 
 body {
     cursor: pointer !important;
-    overflow: hidden;
+    overflow-y: scroll;
 }
 
 ul {
