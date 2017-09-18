@@ -18,6 +18,9 @@
     <section data-title=".NET Code Contracts" data-footer="Adam.Golebiowski @ NewVoiceMedia.com" class="title">
         <a id="mode-switch" href="index.html?presenter-mode" style="opacity: 0.1; position: absolute; bottom: 1.3em; left: 11em; z-index: 666;">@</a>
         <script>if (new Date().getDate() != 23) document.getElementById("mode-switch").remove();</script>
+        <a href="https://wroclawagileday.com/">
+            <img src="images/conference-logo.svg" style="height: 4em; position: absolute; right: var(--horizontal-padding); bottom: var(--vertical-padding)"/>
+        </a>
     </section>
     <section data-title="Slides online: avallach.ovh/contracts">
         <img src="images/qr-code.svg" class="preserve-colors" style="display: block; margin: 0 auto; height: 23em; border: 1em solid rgba(255, 255, 255, 0.3);">
@@ -311,7 +314,7 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
                 <code>{ Contract.Ensures(true); return 1; }</code>
                 <code>{ int result; result = 1; ContractsRuntime.Ensures(true<span class="irrelevant">, "true"</span>); return result; }</code></li>
             <li>Contract.Result is already moved to the end of method with enclosing Ensures and replaced by reference to previously generated "result" variable, that is going to be returned afterwards
-                <code>{ Contract.Ensures(Contract.Result&lt;int&gt;() == 1) return 1; }</code>
+                <code>{ Contract.Ensures(Contract.Result&lt;int&gt;() == 1); return 1; }</code>
                 <code>{ int result; result = 1; ContractsRuntime.Ensures(result == 1<span class="irrelevant">, "result == 1"</span>); return result; }</code></li>
         </ul>
     </section>
