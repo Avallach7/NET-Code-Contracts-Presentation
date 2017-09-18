@@ -229,6 +229,10 @@ body:not(.light) {
     --content-color: white;
 }
 
+body.presenter-mode:not(.light) {
+    --background-color: black;
+}
+
 body:not(.light) section[data-title]:before, 
 body:not(.light) section h1,
 body:not(.light) section:empty::before, 
