@@ -300,7 +300,7 @@ return Contract.Result&lt;Paradox&gt;();</code></li>
             height: 8em;
         ">
         <ul>
-            <li>Contract.Requires is simply transformed to ContractsRuntime.Requires
+            <li>Contract.Requires, Assert and Assume are simply transformed to equivalent ContractsRuntime.* methods
                 <code>{ Contract.Requires(true); }</code>
                 <code>{ ContractsRuntime.Requires(true<span class="irrelevant">, "true"</span>); }</code></li>
             <li>Contract.EnsuresOnThrow&lt;T&gt; wraps method body in try block and is checked in generated catch(T) block
