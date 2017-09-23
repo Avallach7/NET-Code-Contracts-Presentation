@@ -130,7 +130,9 @@ document.app = {
         setSlide: function (id) {
             document.app.switcher.activeSlideId = id;
             document.app.slides[id].scrollIntoView(true);
-            document.app.switcher.onswitch.forEach(function(handler) { handler(id); });
+            document.app.switcher.onswitch.forEach(function (handler) {
+                handler(id);
+            });
         },
 
         onSlideChange: function (event) {
@@ -160,6 +162,7 @@ document.app = {
     progressbar: undefined,
 
     timeLengthMinutes: 30,
+    slideLengths: [0, 55, 45, 50, 60, 60, 55, 105, 35, 40, 195, 50, 75, 90, 50, 65, 65, 65, 85, 170, 85, 75, 70, 50, 95, 75, 75],
     startTime: undefined,
 
     initProgressbar: function () {
@@ -178,6 +181,15 @@ document.app = {
         document.app.updateProgressbar = function () {
             var minutesElapsed = (new Date().getTime() - document.app.startTime) / 1000 / 60;
             var progress = minutesElapsed / document.app.timeLengthMinutes;
+            var timeProgress = 0;
+            var slidesThasShouldHaveBeenPassed = 0;
+            document.app.slideLengths.forEach(function (l) {
+                if (minutesElapsed * 60 > timeProgress) {
+                    timeProgress += l;
+                    slidesThasShouldHaveBeenPassed++;
+                }
+            });
+            progress = slidesThasShouldHaveBeenPassed / document.app.slides.length;
             if (progress >= 1) {
                 progress = 1;
                 clearInterval(loop);
@@ -187,19 +199,19 @@ document.app = {
             var slideCount = document.app.slides.length;
             var slideProgress = document.app.switcher.activeSlideId / slideCount;
             var progressColor;
-            if (slideProgress < progress - (1/slideCount))
+            if (slideProgress < progress - (1 / slideCount))
                 progressColor = "blue";
-            else if (slideProgress > progress + (1/slideCount))
+            else if (slideProgress > progress + (1 / slideCount))
                 progressColor = "red";
             else
                 progressColor = "rgba(128,128,128, 0.2)";
             document.body.style.setProperty("--progress-color", progressColor);
         }
-        var loop = setInterval(document.app.updateProgressbar, 60*1000);
+        var loop = setInterval(document.app.updateProgressbar, 60 * 1000);
         document.app.switcher.onswitch.push(document.app.updateProgressbar);
     },
-    
-    startPresentationMode: function() {
+
+    startPresentationMode: function () {
         if (document.app.parameters.indexOf("presenter-mode") < 0)
             return;
         document.app.switcher.init();
